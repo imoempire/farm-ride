@@ -17,13 +17,26 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
-    },
+      "supportsTablet": true,
+      "bundleIdentifier":"com.farmride.app",
+      "config":{
+        "googleMapsApiKey" :"AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE"
+
+    }
+  },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "package":"com.farmride.app",
+      "config" :{
+        "googleMaps":{
+          "apiKey":"AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE"
+        },
+        "permissions":["ACCESS_COARSE_LOCATION","ACCESS_FINE_LOCATION","FOREGROUND_SERVICE"]
       }
+  
     },
     "web": {
       "favicon": "./assets/favicon.png"
