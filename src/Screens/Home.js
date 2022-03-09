@@ -47,7 +47,7 @@ const Home = () => {
           <View style={styles.sider3}>
             <Image
               style={{ width: "100%", height: "100%" }}
-              source={require("../../assets/phone.png")}
+              source={require("../../assets/truck.jpg")}
             />
           </View>
           <View style={styles.sider4}>
