@@ -13,7 +13,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import Buttons from "../Component/Button/Buttons";
 
-const Wallet = () => {
+const Wallet = ({navigation}) => {
   const [net, setNet] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
