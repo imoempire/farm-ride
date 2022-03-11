@@ -1,18 +1,19 @@
 import {
   Dimensions,
-  FlatList,
   StyleSheet,
   Text,
   View,
   Image,
+  TouchableOpacity
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { parameters } from "../Data/styles";
 import Swiper from "react-native-swiper";
 import TopBar from "../Component/TopBar/TopBar";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { mapStyle } from "../Data/mapStyle";
-import { carsAround } from '../Data/data'
+import { carsAround } from "../Data/data";
+import * as Location from "expo-location";
 
 // AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE
 
@@ -24,14 +25,51 @@ const data = [
   { name: "Later", id: "2" },
 ];
 
-const Home = () => {
+const Home = ({navigation}) => {
+  const [latlng, setLatLng] = useState({});
+
+  const checkPermission = async () => {
+    const hasPermission = await Location.requestForegroundPermissionsAsync();
+    if (hasPermission.status === "granted") {
+      const permission = await askPermission();
+      return permission;
+    }
+    return true;
+  };
+
+  const askPermission = async () => {
+    const permission = await Location.requestForegroundPermissionsAsync();
+    return permission.status === "granted";
+  };
+
+  const getLocation = async () => {
+    try {
+      const { granted } = await Location.requestForegroundPermissionsAsync();
+      if (!granted) return;
+      const {
+        coords: { latitude, longitude },
+      } = await Location.getCurrentPositionAsync();
+      setLatLng({ latitude: latitude, longitude: longitude });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const _map = useRef(1);
+
+  useEffect(() => {
+    checkPermission();
+    getLocation(),
+      []
+  });
+
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
         <TopBar Title={"Welcome"} background={"white"} TitleColor={"#27E20C"} />
       </View>
       <View style={styles.slide}>
-        <Swiper autoplay={true}>
+        <Swiper autoplay={true} autoplayTimeout={4}>
           <View style={styles.sider1}>
             <Image
               style={{ width: "100%", height: "100%" }}
@@ -59,22 +97,41 @@ const Home = () => {
         </Swiper>
       </View>
       <View style={styles.buttons}>
-        <View style={[styles.btn, styles.shadow]}>
-          <Text>Now</Text>
-        </View>
-        <View style={[styles.btn, styles.shadow]}>
-          <Text>Later</Text>
-        </View>
+        <TouchableOpacity onPress={()=>navigation.navigate('BookNow')} style={[styles.btn, styles.shadow]}>
+          <Text>Pick-Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.navigate('BookLate')} style={[styles.btn, styles.shadow]}>
+          <Text>Pick-Up & Sell</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.mapView}>
         <Text style={styles.Text}>Around You</Text>
         <View style={styles.map}>
           <MapView
+            ref={_map}
             style={styles.mapStyle}
+            provider={PROVIDER_GOOGLE}
             customMapStyle={mapStyle}
             showsUserLocation={true}
             followsUserLocation={true}
-          ></MapView>
+            scrollEnabled={true}
+            zoomControlEnabled={true}
+            initialRegion={{
+              ...carsAround[0],
+              latitudeDelta: 0.008,
+              longitudeDelta: 0.008,
+            }}
+          >
+            {carsAround.map((item, index) => (
+              <MapView.Marker coordinate={item} key={index.toString()}>
+                <Image
+                  source={require("../../assets/pick3D.png")}
+                  style={styles.carsAround}
+                  resizeMode="cover"
+                />
+              </MapView.Marker>
+            ))}
+          </MapView>
         </View>
       </View>
     </View>
@@ -168,8 +225,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   mapStyle: {
-    height: 150,
+    height: 200,
     marginVertical: 0,
     width: WIDTH * 0.92,
+  },
+  carsAround: {
+    width: 60,
+    height: 50,
   },
 });
