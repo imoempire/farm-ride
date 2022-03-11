@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const TopBar = ({Title, background, TitleColor }) => {
+const TopBar = ({Title, background, TitleColor, mH }) => {
   return (
-    <View style={{width: '90%', marginHorizontal: 50, borderRadius: 10}}>
+    <View style={{width: '90%', marginHorizontal: mH, borderRadius: 10}}>
       <View style={[styles.bar, {backgroundColor: background,}]}>
          <Text style={{color: TitleColor, fontWeight: 'bold', fontSize: 20}}>{Title}</Text>
       </View>
