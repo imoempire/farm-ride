@@ -1,19 +1,21 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import Buttons from "../Component/Button/Buttons";
 import TopBar from "../Component/TopBar/TopBar";
 import DatePicker from 'react-native-datepicker'
+import { Ionicons } from '@expo/vector-icons';
 
-const BookLate = () => {
+const BookLate = ({navigation}) => {
    const [date, setDate] = useState()
   return (
     <View style={styles.container}>
-      <View style={styles.Image}>
-        <TopBar
-          Title={"BOOK LATER"}
-          background={"white"}
-          TitleColor={"#27E20C"}
-        />
+     <View style={styles.Image}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Tabs')} style={{backgroundColor: 'white', borderRadius: 20, height: 40, width: 40,justifyContent:'center'}}>
+          <View style={{ alignItems: "center", }}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+          </View>
+        </TouchableOpacity>
+        <TopBar Title={"BOOK NOW"} background={"white"} TitleColor={"#27E20C"} mH={10} />
       </View>
       <View style={styles.Form}>
         <View style={styles.form}>
@@ -96,7 +98,9 @@ const styles = StyleSheet.create({
   Image: {
     flex: 0.3,
     alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
   },
   Form: {
     flex: 1,

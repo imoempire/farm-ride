@@ -1,13 +1,20 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import Buttons from "../Component/Button/Buttons";
 import TopBar from "../Component/TopBar/TopBar";
+import { Ionicons } from '@expo/vector-icons';
+import { parameters } from "../Data/styles";
 
-const BookNow = () => {
+const BookNow = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
-        <TopBar Title={"BOOK NOW"} background={"white"} TitleColor={"#27E20C"} />
+        <TouchableOpacity onPress={()=>navigation.navigate('Tabs')} style={{backgroundColor: 'white', borderRadius: 20, height: 40, width: 40,justifyContent:'center'}}>
+          <View style={{ alignItems: "center", }}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+          </View>
+        </TouchableOpacity>
+        <TopBar Title={"BOOK NOW"} background={"white"} TitleColor={"#27E20C"} mH={10} />
       </View>
       <View style={styles.Form}>
       <View style={styles.form}>
@@ -55,11 +62,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#27E20C",
+    paddingTop:parameters.statusBarHeight,
+
   },
   Image: {
     flex: 0.3,
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "row",
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
   Form: {
      flex: 1,
