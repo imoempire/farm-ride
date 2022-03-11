@@ -6,7 +6,23 @@ export const rideData =[
     {street:"179 8th Ave",area:"Bezuidenhout Valley,Johannesburg",id:"4"},
 ];
 
+import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
+export const extra = [ 
+    {title:'Sell For Me', id: 1, icon: FontAwesome5 , name: 'comment-dollar' },
+    {title:'Fund Me', id: 2, icon: MaterialCommunityIcons, name: 'cash-refund'},
+    {title:'Export Advice', id: 3, icon: MaterialIcons, name: 'supervisor-account'},
+    {title:'Hire Tools & Labor', id: 4, icon: FontAwesome5, name: 'hire-a-helper'},
+]
+
+export const history = [ 
+    {pickup:'Banana Street', id: 1,  drop: 'Market', date:'2/5/2021' },
+    {pickup:'Main Road', id: 2,  drop: 'Market', date:'5/5/2021'},
+    {pickup:'Banana Street', id: 3,  drop: 'Market', date:'20/5/2021'},
+    {pickup:'Home', id: 4, drop: 'Farm ride depot', date:'29/5/2021'},
+    {pickup:'Home', id: 5, drop: 'Farm ride depot', date:'2/6/2021'},
+    {pickup:'Home', id: 6, drop: 'Farm ride depot', date:'29/6/2021'},
+]
 
  export const requestData = [{
     name:"For Me",id:0
@@ -22,9 +38,10 @@ export const rideOptions = [{name:"Personal",icon:"account", id:"0"},
 ];
 
 
-export const carsAround = [{latitude:-26.207487,longitude:28.236226},
-    {latitude:-26.202616,longitude:28.227718},
-    {latitude:-26.202424,longitude:28.236612},
-    {latitude:-26.208565,longitude:28.237191},
-    {latitude:-26.203598,longitude:28.239509},
+export const carsAround = [
+    {latitude:5.756972,longitude:-0.1748633},
+    {latitude:5.768299325391991,longitude:-0.18050193786621094},
+    {latitude:5.765812159047456,longitude:-0.18115639686584475},
+    {latitude:5.764061528988557,longitude:-0.1796972751617432},
+    {latitude:5.762385615885739,longitude:-0.1776695251464844},
 ]
