@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
-import Navigate from './src/Navigation/Navigate';
-import BookLate from './src/Screens/BookLate';
-import BookNow from './src/Screens/BookNow';
-import Driver from './src/Screens/Driver';
-import SignIn from './src/Screens/SignIn';
-import SignUp from './src/Screens/SignUp';
+import { StyleSheet, Text, View } from "react-native";
+import { DestinationContextProvider, OriginContextProvider } from "./src/contexts/contexts";
+import Navigate from "./src/Navigation/Navigate";
 
 export default function App() {
   return (
-    <Navigate/>
+    <DestinationContextProvider>
+      <OriginContextProvider>
+        <Navigate />
+      </OriginContextProvider>
+    </DestinationContextProvider>
   );
 }
 
