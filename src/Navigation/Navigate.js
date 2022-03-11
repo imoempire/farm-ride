@@ -6,6 +6,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import SignIn from "../Screens/SignIn";
 import SignUp from "../Screens/SignUp";
 import Tabs from "../Screens/Tabs";
+import BookNow from "../Screens/BookNow";
+import BookLate from "../Screens/BookLate";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +19,8 @@ const Navigate = () => {
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="BookNow" component={BookNow} />
+        <Stack.Screen name="BookLate" component={BookLate} />
       </Stack.Navigator>
     </NavigationContainer>
   );
