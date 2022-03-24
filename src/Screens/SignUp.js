@@ -1,13 +1,18 @@
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import React, { useState} from "react";
 import Buttons from "../Component/Button/Buttons";
-import { Formik } from "formik";
+// import { Formik } from "formik";
 import * as yup from "yup";
 import FormContainer from "../Component/Form/FormContainer";
 import AppInput from "../Component/Form/AppInput";
 import SubmitButton from "../Component/Form/SubmitButton";
 import Customformik from "../Component/Form/CustomFormik";
-import signUp from "../Component/api/auth";
+import {signUp} from "../Component/api/auth";
+import Appnotification from "../Component/AppNotification";
+// import axios from 'axios'
+import {parameters} from '../Data/styles'
+import { updateNotifications } from "../Component/Helper";
+import {StackActions} from '@react-navigation/native'
 
 const initialValues = {
   name: "",
@@ -26,16 +31,29 @@ const validationSchema = yup.object().shape({
 });
 
 const SignUp = ({ navigation }) => {
-  const handleSignUp = async (values) => {
+  const [message, setMessage] = useState({
+    text: '',
+    type: ''
+  });
+  const handleSignUp = async (values, formikActions) => {
     const res = await signUp(values)
-    formikActions.setSubmitting(false)
-    if(!res.success) return console.log(res.error);
-    formikActions.resetForm(true)
-    console.log(res);
+      formikActions.setSubmitting(false);
+       
+      if(!res.success) 
+      return updateNotifications(setMessage, res.error); 
+     
+      formikActions.resetForm(true)
+      
+      navigation.dispatch(StackActions.replace('Verify', 
+      {profile: res.user}
+      ))
   };
 
   return (
     <View style={styles.container}>
+{ message.text ? 
+      <Appnotification type={message.type} text={message.text}/> : null}
+
       <View style={styles.Image}>
         <Image source={require("../../assets/Logo1.png")} />
       </View>
@@ -103,6 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#27E20C",
+    paddingTop: parameters.statusBarHeight,
   },
   Image: {
     flex: 0.3,
