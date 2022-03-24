@@ -11,6 +11,7 @@ import BookLate from "../Screens/BookLate";
 import RequestDone from "../Screens/RequestDone";
 import DestinationScreen from "../Screens/DestinationScreen";
 import Forgetpassword from "../Screens/ForgetPassword";
+import Verification from "../Screens/Verification";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ const Navigate = () => {
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Verify" component={Verification}/>
         <Stack.Screen name="Tabs" component={Tabs} />
         <Stack.Screen name="BookNow" component={BookNow} />
         <Stack.Screen name="BookLate" component={BookLate} />

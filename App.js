@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { DestinationContextProvider, OriginContextProvider } from "./src/contexts/contexts";
 import Navigate from "./src/Navigation/Navigate";
+import Verification from "./src/Screens/Verification";
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       </OriginContextProvider>
     </DestinationContextProvider>
   );
+
 }
 
 const styles = StyleSheet.create({
