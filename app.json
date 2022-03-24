@@ -21,7 +21,6 @@
       "bundleIdentifier":"com.farmride.app",
       "config":{
         "googleMapsApiKey" :"AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE"
-
     }
   },
     "android": {

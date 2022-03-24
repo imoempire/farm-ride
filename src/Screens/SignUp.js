@@ -1,45 +1,98 @@
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import Buttons from "../Component/Button/Buttons";
+import { Formik } from "formik";
+import * as yup from "yup";
+import FormContainer from "../Component/Form/FormContainer";
+import AppInput from "../Component/Form/AppInput";
+import SubmitButton from "../Component/Form/SubmitButton";
+import Customformik from "../Component/Form/CustomFormik";
+import signUp from "../Component/api/auth";
 
-const SignUp = () => {
+const initialValues = {
+  name: "",
+  email: "",
+  password: "",
+};
+
+const validationSchema = yup.object().shape({
+  name: yup.string().trim().required("Name is Missing"),
+  email: yup.string().email().required("Email is Missing"),
+  password: yup
+    .string()
+    .trim()
+    .min(8, "Password is too short")
+    .required("Password is Required"),
+});
+
+const SignUp = ({ navigation }) => {
+  const handleSignUp = async (values) => {
+    const res = await signUp(values)
+    formikActions.setSubmitting(false)
+    if(!res.success) return console.log(res.error);
+    formikActions.resetForm(true)
+    console.log(res);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
         <Image source={require("../../assets/Logo1.png")} />
       </View>
       <View style={styles.Form}>
-      <View style={styles.form}>
-        <View style={styles.form}>
-          <View style={styles.Label}>
-            <Text>Email</Text>
-            <TextInput style={styles.Input} placeholder="Email" />
+        <View style={styles.forms}>
+          <View style={styles.Title}>
+            <Text>Sign-Up Form</Text>
           </View>
-          <View style={styles.Label}>
-            <Text>Phone</Text>
-            <TextInput style={styles.Input} placeholder="+233" />
-          </View>
-          <View style={styles.Label}>
-            <Text>Password</Text>
-            <TextInput style={styles.Input} placeholder="Password" />
-          </View>
-          <View style={{ alignItems: "center", marginVertical: 20 }}>
+          <FormContainer>
+            <Customformik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSignUp}
+            >
+              <AppInput name="name" placeholder="Isaac" />
+              <AppInput name="email" placeholder="example@gmail.com" />
+              <AppInput
+                secureTextEntry={true}
+                name="password"
+                placeholder="*******"
+              />
+              <SubmitButton title="Sign Up" />
+            </Customformik>
+          </FormContainer>
+        </View>
+        <View style={styles.options}>
+          <Buttons
+            press={() => navigation.navigate("SignUp")}
+            textColor={"white"}
+            background={"orange"}
+            content={"Login With Google"}
+            border={0}
+            borderColor={"red"}
+            pd={4}
+            size={20}
+            mH={25}
+            br={5}
+          />
+          <View style={styles.optionsQuestion}>
+            <Text style={{ marginHorizontal: 10 }}>
+              Already have an Account
+            </Text>
             <Buttons
-              press={()=>navigation.navigate('Home')}
+              press={() => navigation.navigate("SignIn")}
               textColor={"white"}
-              background={"#27E20C"}
+              background={"blue"}
               content={"Login"}
               border={0}
               borderColor={"red"}
-              pd={10}
+              pd={3}
               size={20}
               mH={20}
-              br={10}
-              />
+              br={5}
+            />
           </View>
         </View>
       </View>
-   </View>
     </View>
   );
 };
@@ -57,23 +110,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   Form: {
-     flex: 1,
-     backgroundColor: "white",
-     borderTopRightRadius: 50,
-     borderTopLeftRadius: 50,
-   },
-   form: {
-   marginHorizontal: 20,
-   marginVertical: 10
+    flex: 1,
+    backgroundColor: "white",
+    borderTopRightRadius: 50,
+    borderTopLeftRadius: 50,
   },
-  Label: {
+  forms: {
+    flex: 1,
+  },
+  Title: {
+    alignItems: "center",
+    justifyContent: "center",
     marginVertical: 20,
   },
-  Input: {
-    borderWidth: 2,
-    height: 50,
-    borderRadius: 20,
-    paddingLeft: 20,
-    borderColor: "#27E20C",
+  options: {
+    flex: 0.25,
+    marginHorizontal: 50,
+    alignItems: "center",
+  },
+  optionsQuestion: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
   },
 });

@@ -9,10 +9,10 @@ export const rideData =[
 import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 export const extra = [ 
-    {title:'Sell For Me', id: 1, icon: FontAwesome5 , name: 'comment-dollar' },
-    {title:'Fund Me', id: 2, icon: MaterialCommunityIcons, name: 'cash-refund'},
-    {title:'Export Advice', id: 3, icon: MaterialIcons, name: 'supervisor-account'},
-    {title:'Hire Tools & Labor', id: 4, icon: FontAwesome5, name: 'hire-a-helper'},
+    {title:'Sell For Me', id: 1, icon: FontAwesome5 , name: 'comment-dollar', color: '#27E20C' },
+    {title:'Fund Me', id: 2, icon: MaterialCommunityIcons, name: 'cash-refund', color: '#27E20C'},
+    {title:'Export Advice', id: 3, icon: MaterialIcons, name: 'supervisor-account', color: '#27E20C'},
+    {title:'Hire Tools & Labor', id: 4, icon: FontAwesome5, name: 'hire-a-helper', color: '#27E20C'},
 ]
 
 export const history = [ 

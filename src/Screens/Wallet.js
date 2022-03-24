@@ -5,6 +5,7 @@ import {
   ImageBackground,
   FlatList,
   TextInput,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import TopBar from "../Component/TopBar/TopBar";
@@ -27,7 +28,7 @@ const Wallet = ({navigation}) => {
           <View style={styles.Card}>
             <Text
               style={{
-                marginHorizontal: 20,
+                marginHorizontal: 10,
                 bottom: -10,
                 color: "black",
                 fontSize: 20,
@@ -91,8 +92,8 @@ const Wallet = ({navigation}) => {
                       border={0}
                       borderColor={"red"}
                       pd={10}
-                      size={20}
-                      mH={20}
+                      size={10}
+                      mH={10}
                       br={10}
                     />
                     </View>
@@ -101,7 +102,7 @@ const Wallet = ({navigation}) => {
               )}
             />
           </View>
-          <View style={styles.Momo}>
+          <ScrollView style={styles.Momo}>
             <View style={styles.form}>
               <Text
                 style={{
@@ -181,7 +182,7 @@ const Wallet = ({navigation}) => {
                 />
               </View>
             </View>
-          </View>
+          </ScrollView>
         </View>
       </View>
     </View>
@@ -220,11 +221,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 10,
     marginVertical: 10,
-    width: 350,
+    width: 300,
     borderRadius: 20,
   },
   Momo: {
     flex: 1,
+    paddingBottom: 40
   },
   Line1: {
     flexDirection: "row",

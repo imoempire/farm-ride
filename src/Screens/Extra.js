@@ -22,7 +22,7 @@ const Extra = () => {
         renderItem={({item})=>(
           <View>
             <TouchableOpacity style={[styles.btn, styles.shadow]}>
-            <item.icon name={item.name} size={24} color="black" />
+            <item.icon name={item.name} size={24} color={item.color} />
             <Text>{item.title}</Text>
           </TouchableOpacity>
           </View>
@@ -80,10 +80,10 @@ const styles = StyleSheet.create({
   shadow: {
     shadowColor: "black",
     shadowOffset: {
-      width: 20,
-      height: 20,
+      width: 5,
+      height: 5,
     },
-    shadowOpacity: 0.45,
+    shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 10,
   },
