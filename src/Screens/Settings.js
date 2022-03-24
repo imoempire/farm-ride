@@ -10,7 +10,9 @@ import React from "react";
 // icons
 import { FontAwesome5, Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
 
-const Settings = () => {
+const Settings = ({route}) => {
+  const {users} = route.params
+  console.log(users);
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
@@ -19,7 +21,7 @@ const Settings = () => {
           source={require("../../assets/pro.png")}
         />
         <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
-          User's Name
+          User's Name: {users}
         </Text>
       </View>
       <View style={styles.SettingBox}>

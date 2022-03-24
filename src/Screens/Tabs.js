@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import BottomTabs from '../Navigation/BottomTabs'
 
-const Tabs = () => {
+const Tabs = (user) => {
   return (
     <View style={styles.container}> 
-      <BottomTabs/>
+      <BottomTabs user={user}/>
     </View>
   )
 }
