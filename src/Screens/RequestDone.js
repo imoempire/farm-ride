@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View,Dimensions,TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import React, {
   useState,
   useContext,
@@ -10,15 +16,19 @@ import React, {
 import { DestinationContext, OriginContext } from "../contexts/contexts";
 import MapComponent from "../Component/MapComponent";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { parameters } from "../Data/styles";
 import { rideData } from "../Data/data";
+import Buttons from "../Component/Button/Buttons";
+import getDirections from "react-native-google-maps-directions";
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
+export default function RequestDone({ navigation, route }) {
+  const stateofIndex = route.params.state;
+  // console.log(stateofIndex);
 
-export default function RequestDone({navigation, route}) {
   const { origin, dispatchOrigin } = useContext(OriginContext);
   const [userOrigin, setUserOrigin] = useState({
     latitude: origin.latitude,
@@ -32,7 +42,7 @@ export default function RequestDone({navigation, route}) {
 
   const bottomsheet1 = useRef(1);
 
-  const snapPoints1 = useMemo(() => ["70%"], []);
+  const snapPoints1 = useMemo(() => ["20%", "50%"], []);
   const handleSheetChange1 = useCallback((index) => {}, []);
 
   useEffect(() => {
@@ -47,94 +57,172 @@ export default function RequestDone({navigation, route}) {
       <View>
         <View style={styles.view10}>
           <View style={styles.view11}>
-          <MaterialCommunityIcons name="clock-time-four" size={20} color="white" />
+            <MaterialCommunityIcons
+              name="clock-time-four"
+              size={20}
+              color="white"
+            />
           </View>
           <View>
-            <Text style={{ fontSize: 15, color: 'grey' }}>
-              {item.street}
-            </Text>
-            <Text style={{ color: 'grey' }}>{item.area}</Text>
+            <Text style={{ fontSize: 15, color: "grey" }}>{item.street}</Text>
+            <Text style={{ color: "grey" }}>{item.area}</Text>
           </View>
         </View>
       </View>
     ),
     []
   );
+  const handleGetDirections = () => {
+    const data = {
+      source: {
+        latitude: 5.632297,
+        longitude: -0.156598,
+      },
+      destination: {
+        latitude: 5.602986,
+        longitude: -0.170116,
+      },
+      params: [
+        {
+          key: "travelmode",
+          value: "driving", // may be "walking", "bicycling" or "transit" as well
+        },
+        {
+          key: "dir_action",
+          value: "navigate", // this instantly initializes navigation using the given travel mode
+        },
+      ],
+      waypoints: [
+        {
+          latitude: 5.637037,
+          longitude: -0.156298,
+        },
+        {
+          latitude: 5.640883,
+          longitude: -0.156598,
+        },
+        {
+          latitude: 5.642571,
+          longitude: -0.155665,
+        },
+      ],
+    };
 
+    getDirections(data);
+  };
   return (
-   <View style ={styles.container}>
-       <TouchableOpacity onPress={()=>navigation.goBack()} style ={styles.view1}> 
-       <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
-       </TouchableOpacity>
-       <View style = {styles.view2}>
-          
-           <View style ={styles.view4}>
-               <View>
-                   <TouchableOpacity onPress ={()=>navigation.navigate("Destination")}>
-                       <View style = {styles.view6}>
-                           <Text style ={styles.text1}>From where</Text>
-                       </View>
-                   </TouchableOpacity>
-                   <View style ={styles.view7}>
-                   <TouchableOpacity>
-                       <View style ={styles.view5}>
-                           <Text style ={styles.text10}>...</Text>
-                       </View>
-                   </TouchableOpacity>
-                   <View style ={styles.view8}>
-                   <MaterialCommunityIcons name="plus-thick" size={24} color="black" />
-                   </View>
-               </View>
-               </View>
-              
-           </View>
-       </View>
-       <MapComponent userOrigin ={userOrigin} userDestination = {userDestination} />
-       <BottomSheet
-           ref={bottomsheet1}
-           index={0}
-           snapPoints = {snapPoints1}
-           onChange={handleSheetChange1}
-
-           >
-           <BottomSheetFlatList 
-             keyboardShouldPersistTaps = 'always'  
-             data={rideData}
-             keyExtractor = {item=>item.id}
-             renderItem={renderFlatListItems}
-             contentContainerStyle ={styles.contentContainer}
-             ListHeaderComponent={<View style ={styles.view10}>
-                           <View style ={styles.view11}>
-                           <MaterialIcons name="star-rate" size={24} color="black" />
-                           </View>
-                           <View>
-                              <Text style ={styles.text9}>Our Depot to Sell</Text> 
-                           </View>
-                   </View>}
-           ListFooterComponent={
-               <View>
-                   <View style ={styles.view10}>
-                       <View style ={styles.view11}>
-                       <MaterialCommunityIcons name="map-marker" size={24} color="black" />
-                       </View>
-                       <View>
-                           <Text style ={styles.text9}>Set location on map</Text> 
-                       </View>
-                   </View>
-                   <View style ={styles.view10}>
-                       <View style ={styles.view11}>
-                       <MaterialCommunityIcons name="skip-next" size={24} color="black" />
-                       </View>
-                       <View>
-                           <Text style ={styles.text9}>Enter destination later</Text> 
-                       </View>
-                   </View>
-               </View> 
-           }        
-           />
-       </BottomSheet>
-   </View>
-);
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.view1}
+      >
+        <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
+      </TouchableOpacity>
+      <View style={styles.view2}>
+        <View style={styles.view4}>
+          <View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Destination")}
+            >
+              <View style={styles.view6}>
+                <Text style={styles.text1}>From where</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      {stateofIndex === 0 ? (
+        <>
+          <MapComponent
+            userOrigin={userOrigin}
+            userDestination={userDestination}
+          />
+          <BottomSheet
+            ref={bottomsheet1}
+            index={stateofIndex}
+            snapPoints={snapPoints1}
+            onChange={handleSheetChange1}
+          >
+            <BottomSheetFlatList
+              keyboardShouldPersistTaps="always"
+              data={rideData}
+              keyExtractor={(item) => item.id}
+              renderItem={renderFlatListItems}
+              contentContainerStyle={styles.contentContainer}
+              ListHeaderComponent={
+                <View style={styles.view10}>
+                  <View style={styles.view11}>
+                    <MaterialIcons name="star-rate" size={24} color="black" />
+                  </View>
+                  <View>
+                    <Text style={styles.text9}>Our Depot to Sell</Text>
+                  </View>
+                </View>
+              }
+              ListFooterComponent={
+                <View>
+                  <View style={styles.view10}>
+                    <View style={styles.view11}>
+                      <MaterialCommunityIcons
+                        name="map-marker"
+                        size={24}
+                        color="black"
+                      />
+                    </View>
+                    <View>
+                      <Text style={styles.text9}>Set location on map</Text>
+                    </View>
+                  </View>
+                  <View style={styles.view10}>
+                    <View style={styles.view11}>
+                      <MaterialCommunityIcons
+                        name="skip-next"
+                        size={24}
+                        color="black"
+                      />
+                    </View>
+                    <View>
+                      <Text style={styles.text9}>Enter destination later</Text>
+                    </View>
+                  </View>
+                </View>
+              }
+            />
+          </BottomSheet>
+        </>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flex: .1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 20,
+            }}
+          >
+            <Buttons
+              press={handleGetDirections()}
+              textColor={"white"}
+              background={"#27E20C"}
+              content={"DONE"}
+              border={0}
+              borderColor={"red"}
+              pd={10}
+              size={20}
+              mH={20}
+              br={10}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <MapComponent
+              userOrigin={userOrigin}
+              userDestination={userDestination}
+            />
+          </View>
+        </View>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -150,24 +238,24 @@ const styles = StyleSheet.create({
   },
 
   view1: {
-    position: "absolute",
-    top: 25,
-    left: 12,
-    backgroundColor: 'white',
+    // position: "absolute",
+    // top: 25,
+    // left: 12,
+    backgroundColor: "white",
     height: 40,
     width: 40,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 2,
-    zIndex: 8,
+    // zIndex: 8,
   },
 
   view2: {
-    height: SCREEN_HEIGHT * 0.21,
+    height: SCREEN_HEIGHT * 0.091,
     alignItems: "center",
     zIndex: 5,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 
   view3: {
@@ -175,7 +263,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 2,
     marginBottom: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     //height:30,
     zIndex: 10,
   },
@@ -184,14 +272,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   view5: {
-    backgroundColor: '#F2f9f9',
+    backgroundColor: "#F2f9f9",
     width: SCREEN_WIDTH * 0.7,
     height: 40,
     justifyContent: "center",
     marginTop: 10,
   },
   view6: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: "#eeeeee",
     width: SCREEN_WIDTH * 0.7,
     height: 40,
     justifyContent: "center",
@@ -201,7 +289,7 @@ const styles = StyleSheet.create({
   text1: {
     marginLeft: 10,
     fontSize: 16,
-    color: '#43484d',
+    color: "#43484d",
   },
   view8: {
     marginLeft: 10,
@@ -211,12 +299,12 @@ const styles = StyleSheet.create({
     flex: 5,
     flexDirection: "row",
     paddingVertical: 10,
-    borderBottomColor: '#e1e8ee',
+    borderBottomColor: "#e1e8ee",
     borderBottomWidth: 1,
     paddingHorizontal: 15,
   },
   view11: {
-    backgroundColor: '#bebebe',
+    backgroundColor: "#bebebe",
     height: 30,
     width: 30,
     borderRadius: 15,
@@ -234,21 +322,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#bdc6cf',
+    borderBottomColor: "#bdc6cf",
   },
 
   text2: {
     fontSize: 18,
-    color: '#43484d',
+    color: "#43484d",
   },
   text3: {
     fontSize: 16,
-    color: 'black',
+    color: "black",
     fontWeight: "bold",
     marginRight: 5,
   },
 
-  text4: { color: '#5e6977', marginTop: 4 },
+  text4: { color: "#5e6977", marginTop: 4 },
 
   view13: {
     flexDirection: "row",
@@ -261,7 +349,7 @@ const styles = StyleSheet.create({
   button1: {
     height: 40,
     width: 100,
-    backgroundColor: '#eeeeee',
+    backgroundColor: "#eeeeee",
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
@@ -270,7 +358,7 @@ const styles = StyleSheet.create({
 
   button2: {
     height: 50,
-    backgroundColor: '#d6d6d6',
+    backgroundColor: "#d6d6d6",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
@@ -280,11 +368,11 @@ const styles = StyleSheet.create({
   button1Text: {
     fontSize: 17,
     marginTop: -2,
-    color: 'black',
+    color: "black",
   },
 
   button2Text: {
-    color: 'white',
+    color: "white",
     fontSize: 23,
     marginTop: -2,
   },
@@ -295,7 +383,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   view15: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: "#eeeeee",
     height: 40,
     width: 40,
     borderRadius: 20,
@@ -311,7 +399,7 @@ const styles = StyleSheet.create({
 
   text5: {
     fontSize: 12,
-    color: 'black',
+    color: "black",
     marginLeft: 3,
     fontWeight: "bold",
     paddingBottom: 1,
@@ -329,7 +417,7 @@ const styles = StyleSheet.create({
 
   text6: {
     fontSize: 15,
-    color: 'black',
+    color: "black",
     fontWeight: "bold",
   },
 
@@ -354,19 +442,19 @@ const styles = StyleSheet.create({
 
   text7: {
     fontSize: 28,
-    color: 'black',
+    color: "black",
     marginRight: 5,
   },
 
   text8: {
     fontSize: 15,
-    color: '#5e6977',
+    color: "#5e6977",
     textDecorationLine: "line-through",
   },
 
   button3: {
     height: 60,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
     width: SCREEN_WIDTH - 110,
@@ -375,7 +463,7 @@ const styles = StyleSheet.create({
 
   view23: {
     flexDirection: "row",
-    backgroundColor: 'white',
+    backgroundColor: "white",
     // elevation:10,
     justifyContent: "space-between",
     alignItems: "flex-end",
@@ -388,10 +476,10 @@ const styles = StyleSheet.create({
     width: 55,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: '#eeeeee',
+    backgroundColor: "#eeeeee",
     marginBottom: 10,
   },
-  text9: { fontSize: 15, color: '#43484d' },
+  text9: { fontSize: 15, color: "#43484d" },
 
   map: {
     marginVertical: 0,
@@ -436,5 +524,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 
-  text10: { color: '#5e6977', paddingLeft: 10 },
+  text10: { color: "#5e6977", paddingLeft: 10 },
 });

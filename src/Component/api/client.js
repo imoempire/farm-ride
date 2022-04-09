@@ -1,7 +1,3 @@
-import axios from "axios"
+import axios from "axios";
 
-const client = axios.create({
-   baseURL: 'http://172.20.10.4:8000/api'
-})
-
-export default client;
+export default axios.create({ baseURL: "http://192.168.100.236:9000" });

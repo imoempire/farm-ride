@@ -1,21 +1,31 @@
-import React from 'react';
-import {StyleSheet, KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView
+} from "react-native";
 
-const FormContainer = ({children}) => {
-   return (
-      <KeyboardAvoidingView style={styles.container}>
-         <ScrollView showsVerticalScrollIndicator={false}>
-            {children}
-         </ScrollView>
-      </KeyboardAvoidingView>
-   );
+const FormContainer = ({ children }) => {
+  return (
+    <KeyboardAvoidingView
+      enabled
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      style={styles.container}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>{children}</ScrollView>
+    </KeyboardAvoidingView>
+  );
 };
-const {height} = Dimensions.get('window')
+const { height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-   }
-})
+  container: {
+    flex: 1,
+    width: Dimensions.get("window").width,
+    paddingHorizontal: 20,
+  },
+});
 
 export default FormContainer;

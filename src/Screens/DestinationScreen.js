@@ -5,11 +5,16 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  SafeAreaView,
+  Modal,
 } from "react-native";
 import { parameters } from "../Data/styles";
 import { OriginContext, DestinationContext } from "../contexts/contexts";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import Buttons from "../Component/Button/Buttons";
+import { Picker } from "../Component/Picker";
+
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE";
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -26,6 +31,16 @@ const DestinationScreen = ({ navigation }) => {
 
   const [destination, setDestination] = useState(false);
 
+  const [chooseData, setChooseData] = useState('Selete from the avaiable Destination...');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  
+  const changeModalState =(bool)=>{
+        setIsModalVisible(bool)
+  }
+  const setData = (option)=>{
+    setChooseData(option)
+  }
+  
   return (
     <>
       <View style={styles.view2}>
@@ -36,84 +51,42 @@ const DestinationScreen = ({ navigation }) => {
           <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
       </View>
+   
+   
+    {/* Picker Here */}
+    <SafeAreaView>
+      <TouchableOpacity 
+      onPress={()=>changeModalState(true)}
+       style={styles.opacity}>
+          <Text style={styles.texts} >{chooseData}</Text>
+      </TouchableOpacity>
+      <Modal
+        transparent={true}
+        animationType='fade'
+        visible= {isModalVisible}
+        nRequestClose={()=>changeModalState(false)}
+      >
+        <Picker changeModalState={changeModalState} setData={setData} />
+      </Modal>
+    </SafeAreaView>
 
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        styles={autoComplete}
-        onPress={(data, details = null) => {
-          console.log(data, details);
-        }}
-        query={{
-          key: GOOGLE_MAPS_APIKEY,
-          language: "en",
-        }}
-      />
 
-      {/* {destination === false && (
-        <GooglePlacesAutocomplete
-          nearbyPlacesAPI="GooglePlacesSearch"
-          placeholder="From..."
-          listViewDisplayed="auto"
-          debounce={400}
-          // currentLocation ={true}
-          ref={textInput1}
-          minLength={2}
-          enablePoweredByContainer={false}
-          fetchDetails={true}
-          autoFocus={true}
-          styles={autoComplete}
-          
-          renderDescription={(row) => row.description} // custom description render
-          query={{
-            key: GOOGLE_MAPS_APIKEY,
-            language: "en",
-          }}
-
-          onPress= {(data,details = null)=>{
-              dispatchOrigin({type:"ADD_ORIGIN",payload:{
-                  latitude:details.geometry.location.lat,
-                  longitude:details.geometry.location.lng,
-                  address:details.formatted_address,
-                  name:details.name
-              }})
-
-              setDestination(true)
-          }}
+      <View style={{justifyContent: 'center', alignItems: "center", marginVertical: 20}}>
+        <Buttons
+          press={() => navigation.navigate("Request",{ state: 1 })}
+          textColor={"white"}
+          background={"#27E20C"}
+          content={"DONE"}
+          border={0}
+          borderColor={"red"}
+          pd={10}
+          size={20}
+          mH={20}
+          br={10}
         />
-      )} */}
+      </View>
 
-      {/* {destination === true && (
-        <GooglePlacesAutocomplete
-          nearbyPlacesAPI="GooglePlacesSearch"
-          placeholder="Going to..."
-          listViewDisplayed="auto"
-          debounce={400}
-          currentLocation ={true}
-          ref={textInput2}
-          minLength={2}
-          enablePoweredByContainer={false}
-          fetchDetails={true}
-          autoFocus={true}
-          styles={autoComplete}
-          query={{
-            key: GOOGLE_MAPS_APIKEY,
-            language: "en",
-          }}
-          onPress={(data, details = null) => {
-            dispatchDestination({
-              type: "ADD_DESTINATION",
-              payload: {
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-                address: details.formatted_address,
-                name: details.name,
-              },
-            });
-
-            navigation.navigate("Request", { state: 0 });
-          }}
-        />
-      )} */}
+      {/* Random */}
     </>
   );
 };
@@ -142,58 +115,20 @@ const styles = StyleSheet.create({
     zIndex: 10,
     marginVertical: 10,
   },
+   view2: { backgroundColor: "white", zIndex: 4, paddingBottom: 10 },
 
-  view3: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 2,
-    marginBottom: 10,
-    backgroundColor: "white",
-    height: 30,
-    zIndex: 10,
-  },
+  //  Picker
+    texts: {
+       marginVertical: 20,
+       fontSize: 25,
+    },
+    opacity: {
+      backgroundColor: 'orange',
+      alignSelf: 'stretch',
+      paddingHorizontal: 20,
+      marginHorizontal: 20
+    }
 
-  view2: { backgroundColor: "white", zIndex: 4, paddingBottom: 10 },
+  });
 
-  view24: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 15,
-    paddingHorizontal: 20,
-  },
 
-  view25: {
-    flexDirection: "row",
-    alignItems: "baseline",
-  },
-
-  flatlist: {
-    marginTop: 20,
-    zIndex: 17,
-    elevation: 8,
-  },
-});
-
-const autoComplete = {
-  textInput: {
-    backgroundColor: "#eeeeee",
-    height: 50,
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    fontSize: 15,
-    flex: 1,
-    borderWidth: 1,
-    marginHorizontal: 15,
-  },
-  container: {
-    paddingTop: 20,
-    flex: 1,
-    backgroundColor: "white",
-    marginVertical: 20,
-  },
-
-  textInputContainer: {
-    flexDirection: "row",
-  },
-};

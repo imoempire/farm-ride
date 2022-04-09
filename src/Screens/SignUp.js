@@ -1,59 +1,101 @@
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Buttons from "../Component/Button/Buttons";
-// import { Formik } from "formik";
-import * as yup from "yup";
+import { parameters } from "../Data/styles";
+
+// Forms
+import { isValidEmail, isValidObjField, updateError } from "../utils/methods";
 import FormContainer from "../Component/Form/FormContainer";
 import AppInput from "../Component/Form/AppInput";
 import SubmitButton from "../Component/Form/SubmitButton";
 import Customformik from "../Component/Form/CustomFormik";
-import {signUp} from "../Component/api/auth";
-import Appnotification from "../Component/AppNotification";
-// import axios from 'axios'
-import {parameters} from '../Data/styles'
-import { updateNotifications } from "../Component/Helper";
-import {StackActions} from '@react-navigation/native'
+import { StackActions } from "@react-navigation/native";
+import * as Yup from "yup";
+import client from "../Component/api/client";
+import { Formik } from "formik";
 
-const initialValues = {
-  name: "",
-  email: "",
-  password: "",
-};
-
-const validationSchema = yup.object().shape({
-  name: yup.string().trim().required("Name is Missing"),
-  email: yup.string().email().required("Email is Missing"),
-  password: yup
-    .string()
+const validationSchema = Yup.object({
+  fullname: Yup.string()
     .trim()
-    .min(8, "Password is too short")
-    .required("Password is Required"),
+    .min(3, "Invalid name!")
+    .required("Name is required!"),
+  email: Yup.string().email("Invalid email!").required("Email is required!"),
+  password: Yup.string()
+    .trim()
+    .min(8, "Password is too short!")
+    .required("Password is required!"),
+  confirmPassword: Yup.string().equals(
+    [Yup.ref("password"), null],
+    "Password does not match!"
+  ),
 });
 
 const SignUp = ({ navigation }) => {
-  const [message, setMessage] = useState({
-    text: '',
-    type: ''
-  });
-  const handleSignUp = async (values, formikActions) => {
-    const res = await signUp(values)
-      formikActions.setSubmitting(false);
-       
-      if(!res.success) 
-      return updateNotifications(setMessage, res.error); 
-     
-      formikActions.resetForm(true)
+  const userInfo = {
+    fullname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+  const [error, setError] = useState("");
+  const { fullname, email, password, confirmPassword } = userInfo;
+  const handleOnChangeText = (value, fieldName) => {
+    setUserInfo({ ...userInfo, [fieldName]: value });
+  };
+
+  const isValidForm = () => {
+    // we will accept only if all of the fields have value
+    if (!isValidObjField(userInfo))
+      return updateError("Required all fields!", setError);
+    // if valid name with 3 or more characters
+    if (!fullname.trim() || fullname.length < 3)
+      return updateError("Invalid name!", setError);
+    // only valid email id is allowed
+    if (!isValidEmail(email)) return updateError("Invalid email!", setError);
+    // password must have 8 or more characters
+    if (!password.trim() || password.length < 8)
+      return updateError("Password is less then 8 characters!", setError);
+    // password and confirm password must be the same
+    if (password !== confirmPassword)
+      return updateError("Password does not match!", setError);
+
+    return true;
+  };
+
+  // const sumbitForm = () => {
+  //   if (isValidForm()) {
       
-      navigation.dispatch(StackActions.replace('Verify', 
-      {profile: res.user}
-      ))
+  //     console.log(userInfo);
+  //   }
+  // };
+
+  const signUp = async (values, formikActions) => {
+   try {
+    const res = await client.post("/create-user", { ...values });
+   
+    if (res.data.success) {
+      const signInRes = await client.post('/sign-in', {
+        email: values.email,
+        password: values.password,
+      });
+      if (signInRes.data.success) {
+        navigation.dispatch(
+          StackActions.replace('Profile', {
+            token: signInRes.data.token,
+          })
+        );
+      }
+    }
+
+    formikActions.resetForm();
+    formikActions.setSubmitting(false);
+   } catch (error) {
+      console.log(error);
+   }
   };
 
   return (
     <View style={styles.container}>
-{ message.text ? 
-      <Appnotification type={message.type} text={message.text}/> : null}
-
       <View style={styles.Image}>
         <Image source={require("../../assets/Logo1.png")} />
       </View>
@@ -63,21 +105,136 @@ const SignUp = ({ navigation }) => {
             <Text>Sign-Up Form</Text>
           </View>
           <FormContainer>
-            <Customformik
-              initialValues={initialValues}
+            <Formik
+              initialValues={userInfo}
               validationSchema={validationSchema}
-              onSubmit={handleSignUp}
+              onSubmit={signUp}
             >
-              <AppInput name="name" placeholder="Isaac" />
-              <AppInput name="email" placeholder="example@gmail.com" />
-              <AppInput
-                secureTextEntry={true}
-                name="password"
-                placeholder="*******"
-              />
-              <SubmitButton title="Sign Up" />
-            </Customformik>
+              {({
+                values,
+                handleChange,
+                errors,
+                touched,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+              }) => {
+                const { fullname, email, password, confirmPassword } = values;
+                return (
+                  <>
+                    <AppInput
+                      value={fullname}
+                      error={touched.fullname && errors.fullname}
+                      onChangeText={handleChange("fullname")}
+                      onBlur={handleBlur("fullname")}
+                      label="Full Name"
+                      placeholder="John Smith"
+                    />
+                    <AppInput
+                      value={email}
+                      error={touched.email && errors.email}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      autoCapitalize="none"
+                      label="Email"
+                      placeholder="example@email.com"
+                    />
+                    <AppInput
+                      value={password}
+                      error={touched.password && errors.password}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      autoCapitalize="none"
+                      secureTextEntry
+                      label="Password"
+                      placeholder="********"
+                    />
+                    <AppInput
+                      error={touched.confirmPassword && errors.confirmPassword}
+                      onChangeText={handleChange("confirmPassword")}
+                      onBlur={handleBlur("confirmPassword")}
+                      autoCapitalize="none"
+                      secureTextEntry
+                      label="Confirm Password"
+                      placeholder="********"
+                    />
+                    <SubmitButton
+                      submitting={isSubmitting}
+                      onPress={handleSubmit}
+                      title="Sign up"
+                    />
+                  </>
+                );
+              }}
+            </Formik>
           </FormContainer>
+          {/* {error?<Text style={{color: 'red', fontSize: 15 }}>{error}</Text>:null} */}
+
+          {/* <FormContainer>
+            <Formik
+              initialValues={userInfo}
+              validationSchema={validationSchema}
+              onSubmit={signUp}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+              }) => {
+                const { fullname, email, password, confirmPassword } = values;
+                return (
+                  <>
+                    <AppInput
+                      value={fullname}
+                      error={touched.fullname && errors.fullname}
+                      onChangeText={handleChange("fullname")}
+                      onBlur={handleBlur("fullname")}
+                      label="Full Name"
+                      placeholder="John Smith"
+                    />
+                    <AppInput
+                      value={email}
+                      error={touched.email && errors.email}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      autoCapitalize="none"
+                      label="Email"
+                      placeholder="example@email.com"
+                    />
+                    <AppInput
+                      value={password}
+                      error={touched.password && errors.password}
+                      onChangeText={handleChange("password")}
+                      onBlur={handleBlur("password")}
+                      autoCapitalize="none"
+                      secureTextEntry
+                      label="Password"
+                      placeholder="********"
+                    />
+                    <AppInput
+                      value={confirmPassword}
+                      error={touched.confirmPassword && errors.confirmPassword}
+                      onChangeText={handleChange("confirmPassword")}
+                      onBlur={handleBlur("confirmPassword")}
+                      autoCapitalize="none"
+                      secureTextEntry
+                      label="Confirm Password"
+                      placeholder="********"
+                    />
+                    <SubmitButton
+                      submitting={isSubmitting}
+                      onPress={sumbitForm}
+                      title="Sign up"
+                    />
+                  </>
+                );
+              }}
+            </Formik>
+          </FormContainer> */}
         </View>
         <View style={styles.options}>
           <Buttons
@@ -124,7 +281,7 @@ const styles = StyleSheet.create({
     paddingTop: parameters.statusBarHeight,
   },
   Image: {
-    flex: 0.3,
+    flex: 0.2,
     alignItems: "center",
     justifyContent: "center",
   },

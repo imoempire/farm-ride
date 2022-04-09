@@ -100,7 +100,7 @@ const CustomTabBar = (props) => {
   }
 }
 
-const BottomTabs = (user) => {
+const BottomTabs = () => {
   return (
     <Tab.Navigator  screenOptions={{ 
       tabBarStyle: {
@@ -208,7 +208,6 @@ const BottomTabs = (user) => {
       <Tab.Screen
         name="Settings"
         component={Settings}
-        initialParams={{users: user}}
         options={{
           tabBarLabel: ({ focused, color, size }) => (
             (color = "white"),

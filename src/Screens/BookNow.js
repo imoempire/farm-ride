@@ -48,7 +48,7 @@ const BookNow = ({ navigation }) => {
               <TextInput style={styles.Input} placeholder="Phone" />
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate("Request")}
+              onPress={() => {navigation.navigate("Request",{state:0})}}
               style={styles.Label}
             >
               <Text>Pick-Up & Drop Off locations</Text>

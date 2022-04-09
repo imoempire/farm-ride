@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Buttons from "../Component/Button/Buttons";
 import FormContainer from "../Component/Form/FormContainer";
 import Customformik from "../Component/Form/CustomFormik";
@@ -18,13 +18,13 @@ import { updateNotifications } from "../Component/Helper";
 import Appnotification from "../Component/AppNotification";
 // import client from '../Component/api/client'
 // import axios from 'axios'
-import {parameters} from '../Data/styles'
+import { parameters } from "../Data/styles";
 import { StackActions } from "@react-navigation/native";
+import { useLogin } from "../contexts/LoginProvider";
+import { Formik } from "formik";
+import { isValidEmail, isValidObjField, updateError } from "../utils/methods";
+import client from "../Component/api/client";
 
-const initialValues = {
-  email: "",
-  password: "",
-};
 
 const validationSchema = yup.object().shape({
   email: yup.string().email().required("Email is Missing"),
@@ -36,27 +36,55 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = ({ navigation }) => {
-  const [message, setMessage] = useState({
-    text: "",
-    type: "",
+  const { setIsLoggedIn, setProfile } = useLogin();
+  const [userInfo, setUserInfo] = useState({
+    email: "",
+    password: "",
   });
+  const [error, setError] = useState("");
 
-  const handleLogin = async (values, formikActions) => {
-    const res = await signIn(values);
-    formikActions.setSubmitting(false);
-
-    if (!res.success) return updateNotifications(setMessage, res.error);
-    formikActions.resetForm(true);
-   //  navigation.dispatch(StackActions.replace('Tabs', 
-   //  {profile: res.user}
-   //  ))
-   const user = res.user;
-   navigation.navigate('Tabs', user)
+  const { email, password } = userInfo;
+  
+  const handleOnChangeText = (value, fieldName) => {
+    setUserInfo({ ...userInfo, [fieldName]: value });
   };
+
+  const isValidForm = () => {
+    if (!isValidObjField(userInfo))
+      return updateError("Required all fields!", setError);
+
+    if (!isValidEmail(email)) return updateError("Invalid email!", setError);
+
+    if (!password.trim() || password.length < 8)
+      return updateError("Password is too short!", setError);
+
+    return true;
+  };
+
+  const submitForm = async () => {
+    console.log(userInfo);
+    if (isValidForm()) {
+      try {
+        const res = await client.post("/sign-in", { ...userInfo });
+        if (res.data.success) {
+          setUserInfo({ email: "", password: "" });
+          setProfile(res.data.user);
+          setIsLoggedIn(true);
+        }
+
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {message.text ? (
-        <Appnotification type={message.type} text={message.text} />
+      {error ? (
+        <Text style={{ backgroundColor: 'red', color: "white", fontSize: 18, textAlign: "center" }}>
+          {error}
+        </Text>
       ) : null}
 
       {/* Image */}
@@ -70,19 +98,22 @@ const SignIn = ({ navigation }) => {
             <Text>Login Form</Text>
           </View>
           <FormContainer>
-            <Customformik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleLogin}
-            >
-              <AppInput name="email" placeholder="example@gmail.com" />
-              <AppInput
-                secureTextEntry={true}
-                name="password"
-                placeholder="*******"
+            <AppInput
+              value={email}
+              onChangeText={(value) => handleOnChangeText(value, "email")}
+              label="Email"
+              placeholder="example@email.com"
+              autoCapitalize="none"
               />
-              <SubmitButton title="Login" />
-            </Customformik>
+            <AppInput
+              value={password}
+              onChangeText={(value) => handleOnChangeText(value, "password")}
+              label="Password"
+              placeholder="********"
+              autoCapitalize="none"
+              secureTextEntry
+            />
+            <SubmitButton onPress={submitForm} title="Login" />
             <TouchableOpacity onPress={() => navigation.navigate("Forget")}>
               <Text style={styles.Forget}>Forget Password ?</Text>
             </TouchableOpacity>
@@ -90,7 +121,7 @@ const SignIn = ({ navigation }) => {
         </View>
         <View style={styles.options}>
           <Buttons
-            press={() => navigation.navigate("SignUp")}
+            press={() => navigation.navigate("Tabs")}
             textColor={"white"}
             background={"orange"}
             content={"Login With Google"}
@@ -147,7 +178,7 @@ const styles = StyleSheet.create({
   Title: {
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 20,
+    marginVertical: 20, 
   },
   Forget: {
     marginHorizontal: 20,

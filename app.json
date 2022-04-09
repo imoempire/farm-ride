@@ -4,11 +4,11 @@
     "slug": "farm-ride",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Logo1.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/welcome.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#27E20C"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
