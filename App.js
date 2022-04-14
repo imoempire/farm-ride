@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import {
   DestinationContextProvider,
+  HistoryContextProvider,
   OriginContextProvider,
 } from "./src/contexts/contexts";
 import LoginProvider from "./src/contexts/LoginProvider";
-import Navigate from "./src/Navigation/Navigate";
+import Navigate, { TryStack } from "./src/Navigation/Navigate";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import axios from "axios";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from "@react-navigation/native";
 
 // import { useEffect } from "react";
 // import Verification from "./src/Screens/Verification";
@@ -31,15 +32,16 @@ export default function App() {
       <LoginProvider>
         <DestinationContextProvider>
           <OriginContextProvider>
-            <NavigationContainer>
-              <Navigate />
-            </NavigationContainer>
+            <HistoryContextProvider>
+              <NavigationContainer>
+                <TryStack />
+              </NavigationContainer>
+            </HistoryContextProvider>
           </OriginContextProvider>
         </DestinationContextProvider>
       </LoginProvider>
     </GestureHandlerRootView>
   );
-  
 }
 
 const styles = StyleSheet.create({

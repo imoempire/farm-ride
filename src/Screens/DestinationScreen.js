@@ -1,9 +1,8 @@
-import React, { useRef, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableOpacity,
   SafeAreaView,
   Modal,
@@ -11,38 +10,45 @@ import {
 import { parameters } from "../Data/styles";
 import { OriginContext, DestinationContext } from "../contexts/contexts";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+// import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Buttons from "../Component/Button/Buttons";
 import { Picker } from "../Component/Picker";
 
-
-const GOOGLE_MAPS_APIKEY = "AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE";
-const SCREEN_HEIGHT = Dimensions.get("window").height;
-const SCREEN_WIDTH = Dimensions.get("window").width;
+// const GOOGLE_MAPS_APIKEY = "AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE";
 
 // navigator.geolocation = require('@react-native-community/geolocation');
 
 const DestinationScreen = ({ navigation }) => {
+
   const { dispatchOrigin } = useContext(OriginContext);
-  const { dispatchDestination } = useContext(DestinationContext);
+  const { destination, setDestination } = useContext(DestinationContext);
 
-  const textInput1 = useRef(4);
-  const textInput2 = useRef(5);
-
-  const [destination, setDestination] = useState(false);
-
-  const [chooseData, setChooseData] = useState('Selete from the avaiable Destination...');
+  const [chooseData, setChooseData] = useState();
+  const [location, setLocation] = useState({});
+  const [show, setShow] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const changeModalState = (bool) => {
+    setIsModalVisible(bool);
+  };
+  const getDestination = (option) => {
+    setChooseData(option.name);
+    setLocation(option);
+    setDestination(location);
+  };
   
-  const changeModalState =(bool)=>{
-        setIsModalVisible(bool)
-  }
-  const setData = (option)=>{
-    setChooseData(option)
-  }
-  
+  const onPress = () => {
+    setDestination({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      name: location.name,
+    });
+    navigation.navigate("Request", { state: 1, });
+  };
+//  console.log(location, 'jii');
+
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.view2}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -51,29 +57,43 @@ const DestinationScreen = ({ navigation }) => {
           <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
         </TouchableOpacity>
       </View>
-   
-   
-    {/* Picker Here */}
-    <SafeAreaView>
-      <TouchableOpacity 
-      onPress={()=>changeModalState(true)}
-       style={styles.opacity}>
-          <Text style={styles.texts} >{chooseData}</Text>
-      </TouchableOpacity>
-      <Modal
-        transparent={true}
-        animationType='fade'
-        visible= {isModalVisible}
-        nRequestClose={()=>changeModalState(false)}
+
+      {/* Picker Here */}
+      <SafeAreaView style={styles.box}>
+        <TouchableOpacity
+          onPress={() => changeModalState(true)}
+          style={styles.opacity}
+        >
+          <Text style={styles.texts}>
+            {/* Selete from the avaiable Destination... */}
+            {show === 0
+              ? "Selete from the avaiable Destination..."
+              : chooseData}
+          </Text>
+        </TouchableOpacity>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isModalVisible}
+          nRequestClose={() => changeModalState(false)}
+        >
+          <Picker
+            setShow={setShow}
+            changeModalState={changeModalState}
+            setData={getDestination}
+          />
+        </Modal>
+      </SafeAreaView>
+
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          marginVertical: 20,
+        }}
       >
-        <Picker changeModalState={changeModalState} setData={setData} />
-      </Modal>
-    </SafeAreaView>
-
-
-      <View style={{justifyContent: 'center', alignItems: "center", marginVertical: 20}}>
         <Buttons
-          press={() => navigation.navigate("Request",{ state: 1 })}
+          press={() => onPress()}
           textColor={"white"}
           background={"#27E20C"}
           content={"DONE"}
@@ -87,7 +107,7 @@ const DestinationScreen = ({ navigation }) => {
       </View>
 
       {/* Random */}
-    </>
+    </View>
   );
 };
 
@@ -96,9 +116,6 @@ export default DestinationScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
-    alignItems: "center",
-    justifyContent: "center",
     paddingTop: parameters.statusBarHeight,
   },
 
@@ -106,29 +123,33 @@ const styles = StyleSheet.create({
     top: 25,
     left: 12,
     backgroundColor: "#27E20C",
-    height: 40,
-    width: 40,
-    borderRadius: 20,
+    height: 50,
+    width: 50,
+    borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 5,
     zIndex: 10,
-    marginVertical: 10,
   },
-   view2: { backgroundColor: "white", zIndex: 4, paddingBottom: 10 },
+  view2: {
+    flex: 0.1,
+    paddingBottom: 10,
+  },
 
   //  Picker
-    texts: {
-       marginVertical: 20,
-       fontSize: 25,
-    },
-    opacity: {
-      backgroundColor: 'orange',
-      alignSelf: 'stretch',
-      paddingHorizontal: 20,
-      marginHorizontal: 20
-    }
-
-  });
-
-
+  box: {
+    flex: 1,
+    marginVertical: 30,
+  },
+  texts: {
+    marginVertical: 20,
+    fontSize: 20,
+    color: "white",
+  },
+  opacity: {
+    backgroundColor: "#27E20C",
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    borderRadius: 10,
+  },
+});

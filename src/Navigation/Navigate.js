@@ -47,3 +47,15 @@ const Navigate = () => {
 };
 
 export default Navigate;
+
+
+export const TryStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Tabs" component={Tabs} />
+      <Stack.Screen name="BookNow" component={BookNow} />
+      <Stack.Screen name="Request" component={RequestDone} />
+      <Stack.Screen name="Destination" component={DestinationScreen} />
+    </Stack.Navigator>
+  );
+};

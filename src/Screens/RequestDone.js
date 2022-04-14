@@ -13,7 +13,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { DestinationContext, OriginContext } from "../contexts/contexts";
+import { DestinationContext, HistoryContext, OriginContext } from "../contexts/contexts";
 import MapComponent from "../Component/MapComponent";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
@@ -27,31 +27,39 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function RequestDone({ navigation, route }) {
   const stateofIndex = route.params.state;
-  // console.log(stateofIndex);
-
-  const { origin, dispatchOrigin } = useContext(OriginContext);
+  const data = route.params.location;
+  const { origin, setOrigin } = useContext(OriginContext);
+  const { destination, setDestination } = useContext(DestinationContext);
+  const {from, drop} = useContext(HistoryContext)
   const [userOrigin, setUserOrigin] = useState({
     latitude: origin.latitude,
     longitude: origin.longitude,
   });
-  const { destination, dispatchDestination } = useContext(DestinationContext);
+
   const [userDestination, setUserDestination] = useState({
     latitude: destination.latitude,
     longitude: destination.longitude,
   });
 
   const bottomsheet1 = useRef(1);
-
   const snapPoints1 = useMemo(() => ["20%", "50%"], []);
   const handleSheetChange1 = useCallback((index) => {}, []);
 
   useEffect(() => {
-    setUserOrigin({ latitude: origin.latitude, longitude: origin.longitude });
+    setUserOrigin({
+      latitude: origin.latitude,
+      longitude: origin.longitude,
+      name: origin.name,
+    });
     setUserDestination({
       latitude: destination.latitude,
       longitude: destination.longitude,
+      name: destination.name,
     });
   }, [origin, destination]);
+
+  console.log(userDestination);
+
   const renderFlatListItems = useCallback(
     ({ item }) => (
       <View>
@@ -65,7 +73,7 @@ export default function RequestDone({ navigation, route }) {
           </View>
           <View>
             <Text style={{ fontSize: 15, color: "grey" }}>{item.street}</Text>
-            <Text style={{ color: "grey" }}>{item.area}</Text>
+            <Text style={{ color: "grey" }}>{item.contact}</Text>
           </View>
         </View>
       </View>
@@ -75,12 +83,12 @@ export default function RequestDone({ navigation, route }) {
   const handleGetDirections = () => {
     const data = {
       source: {
-        latitude: 5.632297,
-        longitude: -0.156598,
+        latitude: userOrigin.latitude,
+        longitude: userOrigin.longitude,
       },
       destination: {
-        latitude: 5.602986,
-        longitude: -0.170116,
+        latitude: userDestination.latitude,
+        longitude: userDestination.longitude,
       },
       params: [
         {
@@ -110,6 +118,7 @@ export default function RequestDone({ navigation, route }) {
 
     getDirections(data);
   };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -122,7 +131,11 @@ export default function RequestDone({ navigation, route }) {
         <View style={styles.view4}>
           <View>
             <TouchableOpacity
-              onPress={() => navigation.navigate("Destination")}
+              onPress={() =>
+                navigation.navigate("Destination", {
+                  setData: setUserDestination,
+                })
+              }
             >
               <View style={styles.view6}>
                 <Text style={styles.text1}>From where</Text>
@@ -194,17 +207,17 @@ export default function RequestDone({ navigation, route }) {
         <View style={{ flex: 1 }}>
           <View
             style={{
-              flex: .1,
+              flex: 0.1,
               justifyContent: "center",
               alignItems: "center",
               marginVertical: 20,
             }}
           >
             <Buttons
-              press={handleGetDirections()}
+              press={() => handleGetDirections()}
               textColor={"white"}
               background={"#27E20C"}
-              content={"DONE"}
+              content={"START"}
               border={0}
               borderColor={"red"}
               pd={10}
@@ -238,9 +251,6 @@ const styles = StyleSheet.create({
   },
 
   view1: {
-    // position: "absolute",
-    // top: 25,
-    // left: 12,
     backgroundColor: "white",
     height: 40,
     width: 40,
@@ -248,7 +258,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 2,
-    // zIndex: 8,
   },
 
   view2: {

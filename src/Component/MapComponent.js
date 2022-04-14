@@ -65,8 +65,6 @@ export default class MapComponent extends Component {
   }
 
   render() {
-    // 7.946527 lat
-    // -1.023194 long
     return (
       <View>
         <MapView
@@ -81,12 +79,13 @@ export default class MapComponent extends Component {
             longitudeDelta: 3.9421,
           }}
         >
-          <Geojson
+          {/* <Geojson
             geojson={myPlace}
             strokeColor="red"
-            // fillColor="green"
-            strokeWidth={3}
-          />
+            fillColor="green"
+            strokeWidth={1}
+          /> */}
+
           {/* {this.props.userOrigin.latitude != null && (
             <MapView.Marker
               coordinate={this.props.userOrigin}
@@ -143,13 +142,13 @@ export default class MapComponent extends Component {
                 resizeMode="cover"
               />
             </MapView.Marker>
-           <MapViewDirections
+           {/* <MapViewDirections
               origin={origin}
               destination={destination}
               apikey={GOOGLE_MAPS_APIKEY}
               strokeWidth={4}
               strokeColor="black"
-            />
+            /> */}
         </MapView>
       </View>
     );

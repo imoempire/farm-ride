@@ -1,9 +1,9 @@
 export const rideData =[
-    {street:"32 Olivia Rd",area:"Klipfontein 83-Ir,Boksburg",id:"0"},
-    {street:"Hughes Industrial Park",area:"Hughes,Boksburg",id:"1"},
-    {street:"32 Olivia Road",area:" East Rand,Ekurhuleni,Gauteng,1459",id:"2"},
-    {street:"Total Boksburg",area:"35 Atlas Rd,Anderbolt,Boksburg",id:"3"},
-    {street:"179 8th Ave",area:"Bezuidenhout Valley,Johannesburg",id:"4"},
+    {street:"Accra Market",contact:"0273456789",id:"0"},
+    {street:"Kumasi Market",contact:"0547890764",id:"1"},
+    {street:"Takoradi Mall",contact:"0578235728",id:"2"},
+    {street:"Accra Mall",contact:"0278965387",id:"3"},
+    {street:"New SuperMarket",contact:"0575687653",id:"4"},
 ];
 
 import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -15,7 +15,7 @@ export const extra = [
     {title:'Hire Tools & Labor', id: 4, icon: FontAwesome5, name: 'hire-a-helper', color: '#27E20C'},
 ]
 
-export const history = [ 
+export const historyList = [ 
     {pickup:'Banana Street', id: 1,  drop: 'Market', date:'2/5/2021' },
     {pickup:'Main Road', id: 2,  drop: 'Market', date:'5/5/2021'},
     {pickup:'Banana Street', id: 3,  drop: 'Market', date:'20/5/2021'},

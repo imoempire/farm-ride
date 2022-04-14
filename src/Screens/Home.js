@@ -116,7 +116,7 @@ const Home = ({navigation}) => {
             followsUserLocation={true}
             scrollEnabled={true}
             zoomControlEnabled={true}
-            initialRegion={{
+            initialRegion={{ 
               ...carsAround[0],
               latitudeDelta: 0.008,
               longitudeDelta: 0.008,
