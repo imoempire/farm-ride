@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import Buttons from "../Component/Button/Buttons";
-import { parameters } from "../Data/styles";
+import { appColor, parameters } from "../Data/styles";
 
 // Forms
 import { isValidEmail, isValidObjField, updateError } from "../utils/methods";
@@ -13,6 +13,7 @@ import { StackActions } from "@react-navigation/native";
 import * as Yup from "yup";
 import client from "../Component/api/client";
 import { Formik } from "formik";
+import { useLogin } from "../contexts/LoginProvider";
 
 const validationSchema = Yup.object({
   fullname: Yup.string()
@@ -42,6 +43,7 @@ const SignUp = ({ navigation }) => {
   const handleOnChangeText = (value, fieldName) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
   };
+  const {setIsLoggedIn} = useLogin()
 
   const isValidForm = () => {
     // we will accept only if all of the fields have value
@@ -80,10 +82,11 @@ const SignUp = ({ navigation }) => {
       });
       if (signInRes.data.success) {
         navigation.dispatch(
-          StackActions.replace('Profile', {
+          StackActions.replace('', {
             token: signInRes.data.token,
           })
         );
+        setIsLoggedIn(true)
       }
     }
 
@@ -277,7 +280,7 @@ export default SignUp;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     paddingTop: parameters.statusBarHeight,
   },
   Image: {
