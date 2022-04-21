@@ -15,11 +15,11 @@ const HEIGHT = Dimensions.get("window").height;
 const WIDTH = Dimensions.get("window").width;
 const  Picker = (props) => {
   const newLoc = [
-    { name: "Accra", latitude: 5.637037, longitude: -0.156298 },
-    { name: "Kumasi", latitude: 5.640883, longitude: -0.156598 },
-    { name: "Takoradi", latitude: 5.642571, longitude: -0.155665 },
-    { name: "Kasoa", latitude: 5.640883, longitude: -0.156598 },
-    { name: "Danfa", latitude: 5.640883, longitude: -0.156598 },
+    { name: "East Legon", latitude: 5.634150, longitude: -0.171150 },
+    { name: "Parsnip", latitude: 5.643775, longitude: -0.154485 },
+    { name: "Takoradi", latitude: 4.904203, longitude: -1.759872 },
+    { name: "Kumasi", latitude: 6.700071, longitude:  -1.630783 },
+    { name: "ADC", latitude: 	5.565042, longitude: -0.22233836 },
   ];
 
   const itemPress = (option) => {
@@ -59,8 +59,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   modal: {
-    backgroundColor: "#27E20C",
+    backgroundColor: "transparent",
     borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#27E20C",
   },
   option: {
     alignItems: "flex-start",
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     margin: 20,
     fontSize: 20,
     fontWeight: "bold",
-    color: "white",
+    color: "#27E20C",
   },
 });
 
