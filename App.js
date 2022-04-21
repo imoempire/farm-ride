@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, LogBox } from "react-native";
 import {
   DestinationContextProvider,
   HistoryContextProvider,
@@ -9,9 +9,6 @@ import Navigate, { TryStack } from "./src/Navigation/Navigate";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import axios from "axios";
 import { NavigationContainer } from "@react-navigation/native";
-
-// import { useEffect } from "react";
-// import Verification from "./src/Screens/Verification";
 
 export default function App() {
   const fetchApi = async () => {
@@ -26,7 +23,7 @@ export default function App() {
   // useEffect(() => {
   //   fetchApi()
   // }, []);
-
+  LogBox.ignoreAllLogs();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <LoginProvider>
