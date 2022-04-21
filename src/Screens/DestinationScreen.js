@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   Modal,
 } from "react-native";
-import { parameters } from "../Data/styles";
+import { appColor, parameters } from "../Data/styles";
 import { OriginContext, DestinationContext } from "../contexts/contexts";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 // import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -19,7 +19,6 @@ import { Picker } from "../Component/Picker";
 // navigator.geolocation = require('@react-native-community/geolocation');
 
 const DestinationScreen = ({ navigation }) => {
-
   const { dispatchOrigin } = useContext(OriginContext);
   const { destination, setDestination } = useContext(DestinationContext);
 
@@ -36,54 +35,57 @@ const DestinationScreen = ({ navigation }) => {
     setLocation(option);
     setDestination(location);
   };
-  
+
   const onPress = () => {
     setDestination({
       latitude: location.latitude,
       longitude: location.longitude,
       name: location.name,
     });
-    navigation.navigate("Request", { state: 1, });
+    navigation.navigate("Request", { state: 1 });
   };
-//  console.log(location, 'jii');
 
   return (
     <View style={styles.container}>
-      <View style={styles.view2}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.view1}
-        >
-          <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+      <View style={styles.pick}>
+        <View style={styles.backBtn}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.view1}
+          >
+            <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
-      {/* Picker Here */}
-      <SafeAreaView style={styles.box}>
-        <TouchableOpacity
-          onPress={() => changeModalState(true)}
-          style={styles.opacity}
-        >
-          <Text style={styles.texts}>
-            {/* Selete from the avaiable Destination... */}
-            {show === 0
-              ? "Selete from the avaiable Destination..."
-              : chooseData}
-          </Text>
-        </TouchableOpacity>
-        <Modal
-          transparent={true}
-          animationType="fade"
-          visible={isModalVisible}
-          nRequestClose={() => changeModalState(false)}
-        >
-          <Picker
-            setShow={setShow}
-            changeModalState={changeModalState}
-            setData={getDestination}
-          />
-        </Modal>
-      </SafeAreaView>
+        {/* Picker Here */}
+        <View style={styles.destination}>
+          <SafeAreaView style={styles.box}>
+            <TouchableOpacity
+              onPress={() => changeModalState(true)}
+              style={styles.opacity}
+            >
+              <Text style={styles.texts}>
+                {/* Selete from the avaiable Destination... */}
+                {show === 0
+                  ? "Selete from the avaiable Destination..."
+                  : chooseData}
+              </Text>
+            </TouchableOpacity>
+            <Modal
+              transparent={true}
+              animationType="fade"
+              visible={isModalVisible}
+              nRequestClose={() => changeModalState(false)}
+            >
+              <Picker
+                setShow={setShow}
+                changeModalState={changeModalState}
+                setData={getDestination}
+              />
+            </Modal>
+          </SafeAreaView>
+        </View>
+      </View>
 
       <View
         style={{
@@ -95,7 +97,7 @@ const DestinationScreen = ({ navigation }) => {
         <Buttons
           press={() => onPress()}
           textColor={"white"}
-          background={"#27E20C"}
+          background={appColor}
           content={"DONE"}
           border={0}
           borderColor={"red"}
@@ -118,38 +120,39 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: parameters.statusBarHeight,
   },
-
+  pick: {
+    flex: 1,
+    flexDirection: "row",
+    marginVertical: 20,
+  },
   view1: {
-    top: 25,
-    left: 12,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     height: 50,
     width: 50,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 5,
-    zIndex: 10,
+    marginHorizontal: 10,
   },
-  view2: {
-    flex: 0.1,
-    paddingBottom: 10,
+  backBtn: {
+    alignItems: 'center',
   },
 
   //  Picker
   box: {
-    flex: 1,
-    marginVertical: 30,
+    // marginVertical: 30,
   },
   texts: {
-    marginVertical: 20,
+    marginVertical: 10,
     fontSize: 20,
-    color: "white",
+    color: appColor,
   },
   opacity: {
-    backgroundColor: "#27E20C",
-    paddingHorizontal: 10,
+    backgroundColor: "transparent",
+    paddingHorizontal: 30,
     marginHorizontal: 20,
     borderRadius: 10,
+    borderWidth: 2,
+    borderColor: appColor,
   },
 });

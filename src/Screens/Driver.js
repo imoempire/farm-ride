@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import Buttons from "../Component/Button/Buttons";
+import { appColor } from "../Data/styles";
 
 const Driver = () => {
    const star = 4
@@ -30,27 +31,27 @@ const Driver = () => {
         </View>
         <View>
           <View style={styles.info}>
-            <Text style={{ color: "#27E20C", fontSize: 20 }}>
+            <Text style={{ color: appColor, fontSize: 20 }}>
               {"Name".toUpperCase()}
             </Text>
-            <Text style={{ color: "#27E20C", fontSize: 20 }}>
+            <Text style={{ color: appColor, fontSize: 20 }}>
               {"Driver OM".toUpperCase()}
             </Text>
           </View>
           <View style={styles.info}>
-            <Text style={{ color: "#27E20C", fontSize: 20 }}>
+            <Text style={{ color: appColor, fontSize: 20 }}>
               {"Phone".toUpperCase()}
             </Text>
-            <Text style={{ color: "#27E20C", fontSize: 20 }}>057 801 6840</Text>
+            <Text style={{ color: appColor, fontSize: 20 }}>057 801 6840</Text>
           </View>
           <View style={styles.info}>
-            <Text style={{ color: "#27E20C", fontSize: 20 }}>
+            <Text style={{ color: appColor, fontSize: 20 }}>
               {"Car Registration".toUpperCase()}
             </Text>
-            <Text style={{ color: "#27E20C", fontSize: 20 }}>GB-389-20</Text>
+            <Text style={{ color: appColor, fontSize: 20 }}>GB-389-20</Text>
           </View>
           <View style={styles.info}>
-            <Text style={{ color: "#27E20C", fontSize: 20 }}>Ratings</Text>
+            <Text style={{ color: appColor, fontSize: 20 }}>Ratings</Text>
            <Text>{rate}</Text> 
           </View>
           <View style={styles.info}>
@@ -59,7 +60,7 @@ const Driver = () => {
         </View>
         <View style={{alignItems: "center"}}>
         <Buttons textColor={"white"}
-              background={"#27E20C"}
+              background={appColor}
               content={"confirm Pickup"}
               border={0}
               borderColor={"red"}
@@ -78,7 +79,7 @@ export default Driver;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
   },
   Title: {
     flex: 0.3,
