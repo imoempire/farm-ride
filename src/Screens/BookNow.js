@@ -5,17 +5,12 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React,{useState,useContext,useEffect,useRef,useMemo,useCallback} from 'react'
 import Buttons from "../Component/Button/Buttons";
 import TopBar from "../Component/TopBar/TopBar";
 import { Ionicons } from "@expo/vector-icons";
-import { parameters } from "../Data/styles";
-import { DestinationContext, OriginContext } from "../contexts/contexts";
-import MapComponent from "../Component/MapComponent";
-import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet'
+import { appColor, parameters } from "../Data/styles";
 
 const BookNow = ({ navigation }) => {
-
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
@@ -36,7 +31,7 @@ const BookNow = ({ navigation }) => {
         <TopBar
           Title={"BOOK NOW"}
           background={"white"}
-          TitleColor={"#27E20C"}
+          TitleColor={appColor}
           mH={10}
         />
       </View>
@@ -44,22 +39,18 @@ const BookNow = ({ navigation }) => {
         <View style={styles.form}>
           <View style={styles.form}>
             <View style={styles.Label}>
-              <Text>Recipient's Phone</Text>
+              <Text>Phone</Text>
+              <View>
               <TextInput style={styles.Input} placeholder="Phone" />
-            </View>
-            <TouchableOpacity
-              onPress={() => {navigation.navigate("Request",{state:0})}}
-              style={styles.Label}
-            >
-              <Text>Pick-Up & Drop Off locations</Text>
-              <View style={styles.destinations}>
-              <Text style={{}}>Pick-Up location</Text>
               </View>
-            </TouchableOpacity>
+            </View>
             <View style={{ alignItems: "center", marginVertical: 20 }}>
               <Buttons
+                press={() => {
+                  navigation.navigate("Request", { state: 0 });
+                }}
                 textColor={"white"}
-                background={"#27E20C"}
+                background={appColor}
                 content={"Next"}
                 border={0}
                 borderColor={"red"}
@@ -81,7 +72,7 @@ export default BookNow;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     paddingTop: parameters.statusBarHeight,
   },
   Image: {
@@ -108,7 +99,7 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 20,
     paddingLeft: 20,
-    borderColor: "#27E20C",
+    borderColor: appColor,
   },
   destinations: {
     justifyContent: "center",
@@ -116,6 +107,6 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 20,
     paddingLeft: 20,
-    borderColor: "#27E20C",
+    borderColor: appColor,
   },
 });
