@@ -4,6 +4,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, {
   useState,
@@ -13,42 +14,82 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { DestinationContext, HistoryContext, OriginContext } from "../contexts/contexts";
+import {
+  DestinationContext,
+  HistoryContext,
+  OriginContext,
+} from "../contexts/contexts";
 import MapComponent from "../Component/MapComponent";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { parameters } from "../Data/styles";
+import { appColor, parameters } from "../Data/styles";
 import { rideData } from "../Data/data";
 import Buttons from "../Component/Button/Buttons";
 import getDirections from "react-native-google-maps-directions";
+import * as Location from "expo-location";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function RequestDone({ navigation, route }) {
   const stateofIndex = route.params.state;
-  const data = route.params.location;
+  // let stateofIndex = 0;
+  // const data = route.params.location;
   const { origin, setOrigin } = useContext(OriginContext);
   const { destination, setDestination } = useContext(DestinationContext);
-  const {from, drop} = useContext(HistoryContext)
-  const [userOrigin, setUserOrigin] = useState({
-    latitude: origin.latitude,
-    longitude: origin.longitude,
-  });
-
+  const { history, setHistory, city } = useContext(HistoryContext);
+  console.log(city);
   const [userDestination, setUserDestination] = useState({
     latitude: destination.latitude,
     longitude: destination.longitude,
   });
 
+  const [locationName, setLocationName] = useState();
+
   const bottomsheet1 = useRef(1);
-  const snapPoints1 = useMemo(() => ["20%", "50%"], []);
+  const snapPoints1 = useMemo(() => ["15%", "60%"], []);
   const handleSheetChange1 = useCallback((index) => {}, []);
+
+  const [latlng, setLatLng] = useState({});
+
+  const checkPermission = async () => {
+    const hasPermission = await Location.requestForegroundPermissionsAsync();
+    if (hasPermission.status === "granted") {
+      const permission = await askPermission();
+      return permission;
+    }
+    return true;
+  };
+
+  const askPermission = async () => {
+    const permission = await Location.requestForegroundPermissionsAsync();
+    return permission.status === "granted";
+  };
+
+  const getLocation = async () => {
+    try {
+      const { granted } = await Location.requestForegroundPermissionsAsync();
+      if (!granted) return;
+      const {
+        coords: { latitude, longitude, name },
+      } = await Location.getCurrentPositionAsync();
+      setLatLng({ latitude: latitude, longitude: longitude });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    checkPermission();
+    getLocation();
+  }, []);
+
+  const [userOrigin, setUserOrigin] = useState({});
 
   useEffect(() => {
     setUserOrigin({
-      latitude: origin.latitude,
-      longitude: origin.longitude,
+      latitude: latlng.latitude,
+      longitude: latlng.longitude,
       name: origin.name,
     });
     setUserDestination({
@@ -57,8 +98,6 @@ export default function RequestDone({ navigation, route }) {
       name: destination.name,
     });
   }, [origin, destination]);
-
-  console.log(userDestination);
 
   const renderFlatListItems = useCallback(
     ({ item }) => (
@@ -80,11 +119,16 @@ export default function RequestDone({ navigation, route }) {
     ),
     []
   );
+
+  const addHistory = () => {
+    setHistory([...history, { city, destination }]);
+  };
+
   const handleGetDirections = () => {
     const data = {
       source: {
-        latitude: userOrigin.latitude,
-        longitude: userOrigin.longitude,
+        latitude: "",
+        longitude: "",
       },
       destination: {
         latitude: userDestination.latitude,
@@ -100,147 +144,178 @@ export default function RequestDone({ navigation, route }) {
           value: "navigate", // this instantly initializes navigation using the given travel mode
         },
       ],
-      waypoints: [
-        {
-          latitude: 5.637037,
-          longitude: -0.156298,
-        },
-        {
-          latitude: 5.640883,
-          longitude: -0.156598,
-        },
-        {
-          latitude: 5.642571,
-          longitude: -0.155665,
-        },
-      ],
+      // waypoints: [
+      //   {
+      //     latitude: 5.637037,
+      //     longitude: -0.156298,
+      //   },
+      //   {
+      //     latitude: 5.640883,
+      //     longitude: -0.156598,
+      //   },
+      //   {
+      //     latitude: 5.642571,
+      //     longitude: -0.155665,
+      //   },
+      // ],
     };
-
+    addHistory();
     getDirections(data);
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.view1}
-      >
-        <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
-      </TouchableOpacity>
-      <View style={styles.view2}>
-        <View style={styles.view4}>
-          <View>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Destination", {
-                  setData: setUserDestination,
-                })
-              }
-            >
-              <View style={styles.view6}>
-                <Text style={styles.text1}>From where</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+      {/* direction */}
+      <View style={styles.direct}>
+        <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.view1}
+          >
+            <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.directbtn}>
+          <TouchableOpacity>
+            <View style={styles.view6}>
+              <Text style={styles.text1}>{city}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Destination", {
+                setData: setUserDestination,
+              })
+            }
+          >
+            <View style={styles.view6}>
+              <Text style={styles.text1}>To {destination.name} </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
-      {stateofIndex === 0 ? (
-        <>
-          <MapComponent
-            userOrigin={userOrigin}
-            userDestination={userDestination}
-          />
-          <BottomSheet
-            ref={bottomsheet1}
-            index={stateofIndex}
-            snapPoints={snapPoints1}
-            onChange={handleSheetChange1}
-          >
-            <BottomSheetFlatList
-              keyboardShouldPersistTaps="always"
-              data={rideData}
-              keyExtractor={(item) => item.id}
-              renderItem={renderFlatListItems}
-              contentContainerStyle={styles.contentContainer}
-              ListHeaderComponent={
-                <View style={styles.view10}>
-                  <View style={styles.view11}>
-                    <MaterialIcons name="star-rate" size={24} color="black" />
-                  </View>
-                  <View>
-                    <Text style={styles.text9}>Our Depot to Sell</Text>
-                  </View>
-                </View>
-              }
-              ListFooterComponent={
-                <View>
-                  <View style={styles.view10}>
-                    <View style={styles.view11}>
-                      <MaterialCommunityIcons
-                        name="map-marker"
-                        size={24}
-                        color="black"
-                      />
-                    </View>
-                    <View>
-                      <Text style={styles.text9}>Set location on map</Text>
-                    </View>
-                  </View>
-                  <View style={styles.view10}>
-                    <View style={styles.view11}>
-                      <MaterialCommunityIcons
-                        name="skip-next"
-                        size={24}
-                        color="black"
-                      />
-                    </View>
-                    <View>
-                      <Text style={styles.text9}>Enter destination later</Text>
-                    </View>
-                  </View>
-                </View>
-              }
-            />
-          </BottomSheet>
-        </>
-      ) : (
-        <View style={{ flex: 1 }}>
-          <View
-            style={{
-              flex: 0.1,
-              justifyContent: "center",
-              alignItems: "center",
-              marginVertical: 20,
-            }}
-          >
-            <Buttons
-              press={() => handleGetDirections()}
-              textColor={"white"}
-              background={"#27E20C"}
-              content={"START"}
-              border={0}
-              borderColor={"red"}
-              pd={10}
-              size={20}
-              mH={20}
-              br={10}
-            />
-          </View>
-          <View style={{ flex: 1 }}>
+
+      {/* Map */}
+      <View style={styles.Map}>
+        {stateofIndex === 0 ? (
+          <>
             <MapComponent
               userOrigin={userOrigin}
               userDestination={userDestination}
             />
+            <BottomSheet
+              ref={bottomsheet1}
+              index={stateofIndex}
+              snapPoints={snapPoints1}
+              onChange={handleSheetChange1}
+            >
+              <BottomSheetFlatList
+                keyboardShouldPersistTaps="always"
+                data={rideData}
+                keyExtractor={(item) => item.id}
+                renderItem={renderFlatListItems}
+                contentContainerStyle={styles.contentContainer}
+                ListHeaderComponent={
+                  <View style={styles.view10}>
+                    <View style={styles.view11}>
+                      <MaterialIcons name="star-rate" size={24} color="black" />
+                    </View>
+                    <View>
+                      <Text style={styles.text9}>Our Depot to Sell</Text>
+                    </View>
+                  </View>
+                }
+                ListFooterComponent={
+                  <View>
+                    <View style={styles.view10}>
+                      <View style={styles.view11}>
+                        <MaterialCommunityIcons
+                          name="map-marker"
+                          size={24}
+                          color="black"
+                        />
+                      </View>
+                      <View>
+                        <Text style={styles.text9}>Set location on map</Text>
+                      </View>
+                    </View>
+                    <View style={styles.view10}>
+                      <View style={styles.view11}>
+                        <MaterialCommunityIcons
+                          name="skip-next"
+                          size={24}
+                          color="black"
+                        />
+                      </View>
+                      <View>
+                        <Text style={styles.text9}>
+                          Enter destination later
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                }
+              />
+            </BottomSheet>
+          </>
+        ) : (
+          <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, position: "relative" }}>
+              <View>
+                <MapComponent
+                  userOrigin={userOrigin}
+                  userDestination={userDestination}
+                />
+              </View>
+              <View style={styles.buttons}>
+                <View
+                  style={[
+                    { flexDirection: "row", marginHorizontal: 20 },
+                    styles.shadow,
+                  ]}
+                >
+                  <Image
+                    style={{ borderRadius: 50, width: 60, height: 60 }}
+                    source={require("../../assets/pro.png")}
+                  />
+                  <View style={{ marginHorizontal: 10 }}>
+                    <Text style={{ fontWeight: "bold" }}>
+                      Your Pick-Up Driver
+                    </Text>
+                    <Text>Name: James Bond</Text>
+                    <Text>Car Number: GR 3451</Text>
+                  </View>
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginVertical: 20,
+                    }}
+                  >
+                    <Buttons
+                      press={() => handleGetDirections()}
+                      textColor={'white'}
+                      background={appColor}
+                      content={"START"}
+                      border={2}
+                      borderColor={appColor}
+                      pd={5}
+                      size={20}
+                      mH={10}
+                      br={10}
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
           </View>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container1: { flex: 1, paddingTop: parameters.statusBarHeight },
-
   container: {
     flex: 1,
     paddingTop: parameters.statusBarHeight,
@@ -249,7 +324,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
   },
-
+  direct: {
+    flex: 0.25,
+    flexDirection: "row",
+    backgroundColor: appColor,
+    justifyContent: "center",
+  },
+  directbtn: {
+    height: SCREEN_HEIGHT * 0.091,
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
   view1: {
     backgroundColor: "white",
     height: 40,
@@ -259,26 +344,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 2,
   },
-
-  view2: {
-    height: SCREEN_HEIGHT * 0.091,
-    alignItems: "center",
-    zIndex: 5,
-    backgroundColor: "white",
+  Map: {
+    flex: 1,
+    zIndex: 1,
+    elevation: 1,
   },
-
+  buttons: {
+    flex: 0.9,
+    justifyContent: "center",
+    // alignItems: "center",
+    zIndex: 1, // works on ios
+    elevation: 2, // works on android
+    marginTop: -100,
+    backgroundColor: "white",
+    marginHorizontal: 20,
+    borderRadius: 10,
+  },
   view3: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 2,
     marginBottom: 10,
     backgroundColor: "white",
-    //height:30,
     zIndex: 10,
-  },
-  view4: {
-    flexDirection: "row",
-    alignItems: "center",
   },
   view5: {
     backgroundColor: "#F2f9f9",
@@ -414,120 +502,7 @@ const styles = StyleSheet.create({
     paddingBottom: 1,
   },
 
-  view17: {},
-
-  view18: {},
-
-  view19: { flex: 1.7, alignItems: "flex-end" },
-
-  icon: { paddingBottom: 2 },
-
-  view20: { marginRight: 10 },
-
-  text6: {
-    fontSize: 15,
-    color: "black",
-    fontWeight: "bold",
-  },
-
-  view21: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginHorizontal: 30,
-    marginTop: 15,
-  },
-
-  view22: {
-    alignItems: "center",
-    marginBottom: -20,
-  },
-
-  sectionHeaderContainer: {
-    backgroundColor: "white",
-    marginTop: 30,
-    paddingLeft: 15,
-  },
-
-  text7: {
-    fontSize: 28,
-    color: "black",
-    marginRight: 5,
-  },
-
-  text8: {
-    fontSize: 15,
-    color: "#5e6977",
-    textDecorationLine: "line-through",
-  },
-
-  button3: {
-    height: 60,
-    backgroundColor: "black",
-    alignItems: "center",
-    justifyContent: "center",
-    width: SCREEN_WIDTH - 110,
-    marginBottom: 10,
-  },
-
-  view23: {
-    flexDirection: "row",
-    backgroundColor: "white",
-    // elevation:10,
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    paddingHorizontal: 20,
-    height: 80,
-  },
-
-  button2Image: {
-    height: 55,
-    width: 55,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#eeeeee",
-    marginBottom: 10,
-  },
   text9: { fontSize: 15, color: "#43484d" },
-
-  map: {
-    marginVertical: 0,
-    width: SCREEN_WIDTH,
-    zIndex: -1,
-  },
-
-  centeredView: {
-    zIndex: 14,
-  },
-  modalView: {
-    marginHorizontal: 20,
-    marginVertical: 60,
-    backgroundColor: "white",
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    zIndex: 16,
-  },
-
-  view24: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 15,
-    paddingHorizontal: 20,
-  },
-
-  view25: {
-    flexDirection: "row",
-    alignItems: "baseline",
-  },
 
   flatlist: {
     marginTop: 20,
