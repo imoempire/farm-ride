@@ -6,9 +6,9 @@ export const HistoryContext = createContext();
 
 export const OriginContextProvider = (props) => {
   const [origin, setOrigin] = useState({
-    latitude: 5.637037,
-    longitude: -0.156298,
-    name: "Market",
+    latitude: null,
+    longitude: null,
+    name: "",
   });
   return (
     <OriginContext.Provider value={{ origin, setOrigin }}>
@@ -31,10 +31,10 @@ export const DestinationContextProvider = (props) => {
 };
 
 export const HistoryContextProvider = (props) => {
-  const [from, setFrom] = useState('')
-  const [drop, setDrop] = useState('');
+  const [city, setCity]= useState('');
+  const [history, setHistory] = useState('')
   return (
-    <HistoryContext.Provider value={{ from, drop, setFrom, setDrop }}>
+    <HistoryContext.Provider value={{ history, setHistory, city, setCity }}>
       {props.children}
     </HistoryContext.Provider>
   );
