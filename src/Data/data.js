@@ -6,13 +6,12 @@ export const rideData =[
     {street:"New SuperMarket",contact:"0575687653",id:"4"},
 ];
 
-import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { appColor } from './styles';
 
 export const extra = [ 
-    {title:'Sell For Me', id: 1, icon: FontAwesome5 , name: 'comment-dollar', color: '#27E20C' },
-    {title:'Fund Me', id: 2, icon: MaterialCommunityIcons, name: 'cash-refund', color: '#27E20C'},
-    {title:'Export Advice', id: 3, icon: MaterialIcons, name: 'supervisor-account', color: '#27E20C'},
-    {title:'Hire Tools & Labor', id: 4, icon: FontAwesome5, name: 'hire-a-helper', color: '#27E20C'},
+    {title:'Market', id: 1, icon: FontAwesome5 , name: 'comment-dollar', color: appColor },
+    {title:'Hire Tools & Labor', id: 4, icon: FontAwesome5, name: 'hire-a-helper', color: appColor},
 ]
 
 export const historyList = [ 
@@ -23,20 +22,6 @@ export const historyList = [
     {pickup:'Home', id: 5, drop: 'Farm ride depot', date:'2/6/2021'},
     {pickup:'Home', id: 6, drop: 'Farm ride depot', date:'29/6/2021'},
 ]
-
- export const requestData = [{
-    name:"For Me",id:0
-},
-{
-    name:"For Someone",id:1
-}
-
-]
-
-export const rideOptions = [{name:"Personal",icon:"account", id:"0"},
-{name:"Business",icon:"briefcase", id:"1"},  
-];
-
 
 export const carsAround = [
     {latitude:5.756972,longitude:-0.1748633},
