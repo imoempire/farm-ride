@@ -4,16 +4,17 @@ import {
   Text,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
-import { parameters } from "../Data/styles";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { parameters, appColor } from "../Data/styles";
 import Swiper from "react-native-swiper";
 import TopBar from "../Component/TopBar/TopBar";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { mapStyle } from "../Data/mapStyle";
 import { carsAround } from "../Data/data";
 import * as Location from "expo-location";
+import { HistoryContext } from "../contexts/contexts";
 
 // AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE
 
@@ -25,8 +26,9 @@ const data = [
   { name: "Later", id: "2" },
 ];
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [latlng, setLatLng] = useState({});
+  const { city, setCity } = useContext(HistoryContext);
 
   const checkPermission = async () => {
     const hasPermission = await Location.requestForegroundPermissionsAsync();
@@ -55,18 +57,38 @@ const Home = ({navigation}) => {
     }
   };
 
+  const [locationName, setLocationName] = useState();
+
+  const locName = async () => {
+    const name = await Location.reverseGeocodeAsync({
+      latitude: latlng.latitude,
+      longitude: latlng.longitude,
+    });
+
+    let city;
+    name.find((p) => {
+      city = p.city;
+      setCity(p.city);
+    });
+    console.log(city);
+  };
+
   const _map = useRef(1);
 
   useEffect(() => {
     checkPermission();
-    getLocation(),
-      []
-  });
+    getLocation();
+    
+  }, []);
+
+  useEffect(() => {
+    locName();
+  }, [latlng]);
 
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
-        <TopBar Title={"Welcome"} background={"white"} TitleColor={"#27E20C"} />
+        <TopBar Title={"Welcome"} background={appColor} TitleColor={'white'} />
       </View>
       <View style={styles.slide}>
         <Swiper autoplay={true} autoplayTimeout={4}>
@@ -97,10 +119,16 @@ const Home = ({navigation}) => {
         </Swiper>
       </View>
       <View style={styles.buttons}>
-        <TouchableOpacity onPress={()=>navigation.navigate('BookNow')} style={[styles.btn, styles.shadow]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("BookNow")}
+          style={[styles.btn, styles.shadow]}
+        >
           <Text>Pick-Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>navigation.navigate('BookLate')} style={[styles.btn, styles.shadow]}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("BookLate")}
+          style={[styles.btn, styles.shadow]}
+        >
           <Text>Pick-Up & Sell</Text>
         </TouchableOpacity>
       </View>
@@ -116,7 +144,7 @@ const Home = ({navigation}) => {
             followsUserLocation={true}
             scrollEnabled={true}
             zoomControlEnabled={true}
-            initialRegion={{ 
+            initialRegion={{
               ...carsAround[0],
               latitudeDelta: 0.008,
               longitudeDelta: 0.008,
@@ -144,7 +172,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: parameters.statusBarHeight,
-    backgroundColor: "#e1e8ee",
+    backgroundColor: "white",
   },
   Image: {
     flex: 0.2,
@@ -196,6 +224,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: 10,
     alignItems: "center",
+    borderWidth: 2,
+    borderColor: appColor,
   },
   shadow: {
     shadowColor: "black",
@@ -212,7 +242,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   Text: {
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     padding: 5,
     color: "#FFFFFF",
     fontSize: 15,
