@@ -18,7 +18,7 @@ import { updateNotifications } from "../Component/Helper";
 import Appnotification from "../Component/AppNotification";
 // import client from '../Component/api/client'
 // import axios from 'axios'
-import { parameters } from "../Data/styles";
+import { appColor, parameters } from "../Data/styles";
 import { StackActions } from "@react-navigation/native";
 import { useLogin } from "../contexts/LoginProvider";
 import { Formik } from "formik";
@@ -158,7 +158,7 @@ export default SignIn;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     paddingTop: parameters.statusBarHeight,
   },
   Image: {
