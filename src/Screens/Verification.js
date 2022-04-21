@@ -15,6 +15,7 @@ import { verify } from "../Component/api/auth";
 import { StackActions, useNavigation } from "@react-navigation/native";
 import Appnotification from "../Component/AppNotification";
 import { updateNotifications } from "../Component/Helper";
+import { appColor } from "../Data/styles";
 
 const inputs = Array(4).fill("");
 let newInputIndex = 0;
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: inputWidth / 2,
   },
   Text: {
-    color: "#27E20C",
+    color: appColor,
     textAlign: "center",
     marginBottom: 15,
   },
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     width: inputWidth,
     height: inputWidth,
     borderWidth: 2,
-    borderColor: "#27E20C",
+    borderColor: appColor,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
   Done: {
     alignItems: "center",
     marginVertical: 100,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     marginHorizontal: 100,
     padding: 10,
     borderRadius: 10,

@@ -2,13 +2,12 @@ import {
   Image,
   StyleSheet,
   Text,
-  TextInput,
   View,
   ScrollView,
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { parameters } from "../Data/styles";
+import { appColor, parameters } from "../Data/styles";
 
 // icons
 import { FontAwesome5, Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
@@ -16,11 +15,12 @@ import client from "../Component/api/client";
 import * as ImagePicker from "expo-image-picker";
 import { useLogin } from "../contexts/LoginProvider";
 
-const Settings = props => {
+
+const Settings = (props) => {
   const [profileImage, setProfileImage] = useState("");
   const [progress, setProgress] = useState(0);
   // const { token } = props.route.params;
-  const {profile, setIsLoggedIn} = useLogin()
+  const { profile, setIsLoggedIn } = useLogin();
 
   const openImageLibrary = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -57,7 +57,7 @@ const Settings = props => {
           authorization: `JWT ${profile.token}`,
         },
       });
-    
+
       // if (res.data.success) {
       //   props.navigation.dispatch(StackActions.replace('UserProfile'));
       // }
@@ -79,16 +79,18 @@ const Settings = props => {
                 style={{ width: "100%", height: "100%" }}
               />
             ) : (
-              <Text style={styles.uploadBtn}>Upload Profile Image</Text>
+              <View style={{alignItems: 'center'}}>
+                <Ionicons name="person" size={50} color="white" />
+                <Text style={styles.uploadBtn}>Upload Profile Image</Text>
+              </View>
             )}
           </TouchableOpacity>
-          {/* {progress? <Text style={styles.skip}>{progress}</Text>: null} */}
           {profileImage ? (
             <Text
               onPress={uploadProfileImage}
               style={[
                 styles.skip,
-                { backgroundColor: "green", color: "white", borderRadius: 8 },
+                { backgroundColor: "white", color: "black", borderRadius: 8 },
               ]}
             >
               Upload
@@ -96,10 +98,10 @@ const Settings = props => {
           ) : null}
         </View>
         <View style={styles.Info}>
-          <View >
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
-            {profile.fullname}
-          </Text>
+          <View>
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 15 }}>
+              {profile.fullname}
+            </Text>
           </View>
         </View>
       </View>
@@ -135,7 +137,9 @@ const Settings = props => {
               <View style={styles.settingBoxItem}>
                 <AntDesign name="logout" size={24} color="black" />
                 <TouchableOpacity onPress={() => setIsLoggedIn(false)}>
-                  <Text style={{ fontSize: 20, marginHorizontal: 20 }}>LogOut</Text>
+                  <Text style={{ fontSize: 20, marginHorizontal: 20 }}>
+                    LogOut
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -151,17 +155,17 @@ export default Settings;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     paddingTop: parameters.statusBarHeight,
   },
   Image: {
     flex: 0.3,
-    alignContent: 'center',
-    justifyContent: 'center',
+    alignContent: "center",
+    justifyContent: "center",
   },
   SettingBox: {
     flex: 1,
-    backgroundColor: "#e1e8ee",
+    backgroundColor: "white",
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
   },
@@ -173,14 +177,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     borderWidth: 2,
-    borderColor: "#27E20C",
+    borderColor: appColor,
     borderRadius: 10,
   },
   settingBox: {
     marginHorizontal: 20,
     marginVertical: 10,
     borderWidth: 2,
-    borderColor: "#27E20C",
+    borderColor: appColor,
     borderRadius: 10,
   },
   BoxItem: {
@@ -197,31 +201,32 @@ const styles = StyleSheet.create({
   },
   uploadBtnContainer: {
     height: 100,
-    width: 100,
-    borderRadius: 125 / 2,
+    width: 300,
+    borderRadius: 12,
     borderWidth: 1,
     overflow: "hidden",
     alignContent: "center",
-    justifyContent: "center",    
+    justifyContent: "center",
+    borderColor: 'white',
   },
   picker: {
-    flex: .6, 
-    alignItems: 'center',
+    flex: 0.6,
+    alignItems: "center",
   },
-  ininfo:{
+  ininfo: {
     marginVertical: 30,
-    marginHorizontal: 30
+    marginHorizontal: 30,
   },
   Info: {
-    flex: .2, 
-    alignItems: 'center',
+    flex: 0.2,
+    alignItems: "center",
   },
   uploadBtn: {
     textAlign: "center",
     fontSize: 16,
     opacity: 0.3,
     fontWeight: "bold",
-   
+    color: 'white'
   },
   skip: {
     textAlign: "center",
