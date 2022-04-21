@@ -13,6 +13,7 @@ import { card, network } from "../Data/Card";
 import { Dropdown } from "react-native-element-dropdown";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import Buttons from "../Component/Button/Buttons";
+import { appColor } from "../Data/styles";
 
 const Wallet = ({navigation}) => {
   const [net, setNet] = useState(null);
@@ -21,7 +22,7 @@ const Wallet = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.Bar}>
-        <TopBar Title={"Wallet"} background={"white"} TitleColor={"#27E20C"} />
+        <TopBar Title={"Wallet"} background={"white"} TitleColor={appColor} />
       </View>
       <View style={styles.Form}>
         <View style={styles.form}>
@@ -87,7 +88,7 @@ const Wallet = ({navigation}) => {
                     <Buttons
                       press={() => navigation.navigate("Home")}
                       textColor={"white"}
-                      background={"#27E20C"}
+                      background={appColor}
                       content={`Pay ${"$20"}`}
                       border={0}
                       borderColor={"red"}
@@ -157,7 +158,7 @@ const Wallet = ({navigation}) => {
                 <Buttons
                   press={() => navigation.navigate("Home")}
                   textColor={"white"}
-                  background={"#27E20C"}
+                  background={appColor}
                   content={`Pay ${"$20"}`}
                   border={0}
                   borderColor={"red"}
@@ -170,11 +171,11 @@ const Wallet = ({navigation}) => {
               <View style={styles.Line3}>
               <Buttons
                   press={() => navigation.navigate("Home")}
-                  textColor={"#27E20C"}
+                  textColor={appColor}
                   background={"white"}
                   content={`Pay Cash ${"$20"}`}
                   border={2}
-                  borderColor={"#27E20C"}
+                  borderColor={appColor}
                   pd={10}
                   size={20}
                   mH={20}
@@ -194,7 +195,7 @@ export default Wallet;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
   },
   Bar: {
     flex: 0.3,
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
   },
   Form: {
     flex: 1,
-    backgroundColor: '#e1e8ee',
+    backgroundColor: 'white',
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
   },
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 50,
-    borderColor: "#27E20C",
+    borderColor: appColor,
     borderWidth: 2,
     borderRadius: 8,
     paddingHorizontal: 8,
