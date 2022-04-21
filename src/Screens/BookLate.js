@@ -4,6 +4,7 @@ import Buttons from "../Component/Button/Buttons";
 import TopBar from "../Component/TopBar/TopBar";
 import DatePicker from 'react-native-datepicker'
 import { Ionicons } from '@expo/vector-icons';
+import { appColor } from "../Data/styles";
 
 const BookLate = ({navigation}) => {
    const [date, setDate] = useState()
@@ -15,7 +16,7 @@ const BookLate = ({navigation}) => {
           <Ionicons name="arrow-back" size={24} color="black" />
           </View>
         </TouchableOpacity>
-        <TopBar Title={"BOOK NOW"} background={"white"} TitleColor={"#27E20C"} mH={10} />
+        <TopBar Title={"BOOK NOW"} background={"white"} TitleColor={appColor} mH={10} />
       </View>
       <View style={styles.Form}>
         <View style={styles.form}>
@@ -70,7 +71,7 @@ const BookLate = ({navigation}) => {
             <View style={{ alignItems: "center", marginVertical: 20 }}>
               <Buttons
                 textColor={"white"}
-                background={"#27E20C"}
+                background={appColor}
                 content={"SUBMIT"}
                 border={0}
                 borderColor={"red"}
@@ -93,7 +94,7 @@ export default BookLate;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
   },
   Image: {
     flex: 0.3,
@@ -123,6 +124,6 @@ const styles = StyleSheet.create({
     height: 45,
     borderRadius: 20,
     paddingLeft: 20,
-    borderColor: "#27E20C",
+    borderColor: appColor,
   },
 });
