@@ -10,23 +10,27 @@ import {
 import React, { useContext, useState } from "react";
 import TopBar from "../Component/TopBar/TopBar";
 import { extra, historyList } from "../Data/data";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { DestinationContext, OriginContext } from "../contexts/contexts";
+import { MaterialCommunityIcons,FontAwesome5 } from "@expo/vector-icons";
+import {
+  DestinationContext,
+  HistoryContext,
+  OriginContext,
+} from "../contexts/contexts";
+import { appColor } from "../Data/styles";
 
 const WIDTH = Dimensions.get("window").width;
 
 const Extra = () => {
   const { origin, setOrigin } = useContext(OriginContext);
-  const { destination, setDestination } = useContext(DestinationContext);
+  const { history, setHistory } = useContext(HistoryContext);
 
-  const [history, setHistory] = useState([{
-    from: origin.name,
-    drop: destination.name,
-  }]);
+  const [rideHistory, setRideHistory] = useState(history);
+
+  console.log(rideHistory);
 
   const [pickupHistory, setPickupHistory] = useState(historyList);
 
-  console.log(pickupHistory);
+  console.log(history);
 
   const Delete = (itemId) => {
     setPickupHistory(pickupHistory.filter((item) => item.id !== itemId));
@@ -35,32 +39,27 @@ const Extra = () => {
   return (
     <View style={styles.container}>
       <View style={styles.Bar}>
-        <TopBar Title={"Extra"} background={"#27E20C"} TitleColor={"white"} />
+        <TopBar Title={"Extra"} background={appColor} TitleColor={"white"} />
       </View>
       <View style={styles.Extra}>
-        <FlatList
-          horizontal={true}
-          data={extra}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View>
-              <TouchableOpacity style={[styles.btn, styles.shadow]}>
-                <item.icon name={item.name} size={24} color={item.color} />
-                <Text>{item.title}</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+        <View>
+          <TouchableOpacity onPress={()=>{
+            alert(" Let help you sell your product")
+          }} style={[styles.btn, styles.shadow]}>
+            <FontAwesome5 name='comment-dollar' size={40} color={appColor} />
+            <Text>MARKET</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.History}>
-        <Text style={styles.Text}>History</Text>
+        <Text style={styles.Text}>Ride History</Text>
         <View style={styles.history}>
-          {pickupHistory.length === 0 ? (
+          {history.length === 0 ? (
             <Text>History Empty </Text>
           ) : (
             <FlatList
-              data={history}
-              // keyExtractor={(item) => item.id}
+              data={rideHistory}
+              keyExtractor={(item) => item.id}
               renderItem={({ item, index }) => (
                 <View
                   style={[
@@ -86,13 +85,11 @@ const Extra = () => {
                       {item.date}
                     </Text>
                   </View>
-                  <TouchableOpacity
-                  //  onPress={() => Delete(item.id)}
-                   >
+                  <TouchableOpacity onPress={() => Delete(item.id)}>
                     <MaterialCommunityIcons
                       name="delete-circle"
                       size={35}
-                      color={index % 2 === 0 ? "white" : "#27E20C"}
+                      color={index % 2 === 0 ? "white" : appColor}
                     />
                   </TouchableOpacity>
                 </View>
@@ -105,17 +102,12 @@ const Extra = () => {
   );
 };
 
-// handleDelete = itemId => {
-//   const items = this.state.items.filter(item => item.id !== itemId);
-//   this.setState({ items: items });
-// };
-
 export default Extra;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#e1e8ee",
+    backgroundColor: "white",
   },
   Bar: {
     flex: 0.3,
@@ -124,13 +116,14 @@ const styles = StyleSheet.create({
   },
   Extra: {
     flex: 0.3,
-    // backgroundColor: '#27E20C'
+    justifyContent: "center",
+    alignItems: "center",
   },
   btn: {
     backgroundColor: "white",
     borderRadius: 10,
-    height: "60%",
-    width: (WIDTH * 30) / 100,
+    height: "90%",
+    width: (WIDTH * 80) / 100,
     marginVertical: 0,
     justifyContent: "center",
     marginHorizontal: 10,
@@ -147,7 +140,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   Text: {
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     padding: 10,
     color: "#FFFFFF",
     fontSize: 15,
@@ -164,7 +157,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   hist: {
-    backgroundColor: "#27E20C",
+    backgroundColor: appColor,
     marginVertical: 6,
     padding: 10,
     borderRadius: 10,
@@ -177,6 +170,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: "#27E20C",
+    borderColor: appColor,
   },
 });
