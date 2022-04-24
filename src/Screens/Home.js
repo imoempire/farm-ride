@@ -120,17 +120,17 @@ const Home = ({ navigation }) => {
       </View>
       <View style={styles.buttons}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("BookNow")}
+          onPress={() => navigation.navigate("Request", { state: 0 })}
           style={[styles.btn, styles.shadow]}
         >
-          <Text>Pick-Up</Text>
+          <Text>Book A Pick-Up</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("BookLate")}
           style={[styles.btn, styles.shadow]}
         >
           <Text>Pick-Up & Sell</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <View style={styles.mapView}>
         <Text style={styles.Text}>Around You</Text>
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     height: "70%",
-    width: (WIDTH * 40) / 100,
+    width: (WIDTH * 60) / 100,
     marginVertical: 20,
     justifyContent: "center",
     marginHorizontal: 10,

@@ -44,6 +44,7 @@ const Wallet = ({navigation}) => {
               renderItem={({ item }) => (
                 <View style={styles.card}>
                   <ImageBackground
+                  imageStyle={{ borderRadius: 10 }}
                     source={item.image}
                     style={{
                       flex: 1,

@@ -10,11 +10,17 @@ import React, { useState } from "react";
 import { appColor, parameters } from "../Data/styles";
 
 // icons
-import { FontAwesome5, Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
+import {
+  FontAwesome5,
+  Ionicons,
+  Entypo,
+  AntDesign,
+  Feather,
+  MaterialCommunityIcons 
+} from "@expo/vector-icons";
 import client from "../Component/api/client";
 import * as ImagePicker from "expo-image-picker";
 import { useLogin } from "../contexts/LoginProvider";
-
 
 const Settings = (props) => {
   const [profileImage, setProfileImage] = useState("");
@@ -79,7 +85,7 @@ const Settings = (props) => {
                 style={{ width: "100%", height: "100%" }}
               />
             ) : (
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: "center" }}>
                 <Ionicons name="person" size={50} color="white" />
                 <Text style={styles.uploadBtn}>Upload Profile Image</Text>
               </View>
@@ -110,8 +116,21 @@ const Settings = (props) => {
           style={{ marginTop: 10, marginBottom: 10, marginHorizontal: 20 }}
         >
           <View style={styles.Box}>
-            <Text style={{ fontSize: 20 }}>Account Detials</Text>
-
+            <View
+              style={[
+                styles.BoxItem,
+                {
+                  borderBottomWidth: 2,
+                  paddingBottom: 10,
+                  borderColor: "#eee",
+                },
+              ]}
+            >
+              <MaterialCommunityIcons name="account" size={30} color="black" />
+              <Text style={{ fontSize: 20, marginHorizontal: 20 }}>
+                Account
+              </Text>
+            </View>
             <View style={styles.accountBox}>
               <View style={styles.BoxItem}>
                 <FontAwesome5 name="user-edit" size={24} color="black" />
@@ -121,7 +140,21 @@ const Settings = (props) => {
           </View>
 
           <View style={styles.Box}>
-            <Text style={{ fontSize: 20 }}>Settings</Text>
+            <View
+              style={[
+                styles.BoxItem,
+                {
+                  borderBottomWidth: 2,
+                  paddingBottom: 10,
+                  borderColor: "#eee",
+                },
+              ]}
+            >
+              <Feather name="settings" size={24} color="black" />
+              <Text style={{ fontSize: 20, marginHorizontal: 20 }}>
+                Settings
+              </Text>
+            </View>
 
             <View style={styles.settingBox}>
               <View style={styles.settingBoxItem}>
@@ -174,17 +207,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   accountBox: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginVertical: 10,
-    borderWidth: 2,
-    borderColor: appColor,
     borderRadius: 10,
   },
   settingBox: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginVertical: 10,
-    borderWidth: 2,
-    borderColor: appColor,
     borderRadius: 10,
   },
   BoxItem: {
@@ -207,7 +236,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     alignContent: "center",
     justifyContent: "center",
-    borderColor: 'white',
+    borderColor: "white",
   },
   picker: {
     flex: 0.6,
@@ -226,7 +255,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     opacity: 0.3,
     fontWeight: "bold",
-    color: 'white'
+    color: "white",
   },
   skip: {
     textAlign: "center",
