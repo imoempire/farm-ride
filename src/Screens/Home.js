@@ -58,17 +58,26 @@ const Home = ({ navigation }) => {
   };
 
   const locName = async () => {
+    try {
+    const latitude = 5.78216;
+    const longitude = -0.1821567;
+
     const name = await Location.reverseGeocodeAsync({
-      latitude: latlng.latitude,
-      longitude: latlng.longitude,
+     latitude,
+     longitude,
     });
+    console.log(name);
     let city;
     name.find((p) => {
       city = p.city;
       setCity(p.city);
     });
+    
+    } catch (error) {
+      console.log(error);
+    }
   };
-  
+  console.log(city);
   const _map = useRef(1);
   
   useEffect(() => {
@@ -80,7 +89,6 @@ const Home = ({ navigation }) => {
     locName();
   }, [latlng]);
   
-  console.log(latlng);
   return (
     <View style={styles.container}>
       <View style={styles.Image}>

@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { appColor, parameters } from "../Data/styles";
 
 // icons
@@ -21,6 +21,9 @@ import {
 import client from "../Component/api/client";
 import * as ImagePicker from "expo-image-picker";
 import { useLogin } from "../contexts/LoginProvider";
+import * as Location from 'expo-location';
+
+let apiKey = 'AIzaSyBBKtnI-GKkr1fAp9nmrhcenty_wkG1deE';
 
 const Settings = (props) => {
   const [profileImage, setProfileImage] = useState("");
@@ -71,6 +74,43 @@ const Settings = (props) => {
       console.log(error.message);
     }
   };
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [address, setAddress] = useState(null);
+  const [getLocation, setGetLocation] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+      }
+
+      Location.setGoogleApiKey(apiKey);
+
+      console.log(status, 'yth');
+
+      let { coords } = await Location.getCurrentPositionAsync();
+
+      setLocation(coords);
+
+      console.log(coords, 'df');
+
+      if (coords) {
+        let { longitude, latitude } = coords;
+
+        let regionName = await Location.reverseGeocodeAsync({
+          longitude,
+          latitude,
+        });
+        setAddress(regionName);
+        console.log(regionName, 'nothing');
+      }
+
+    });
+  }, [getLocation]);
+
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
@@ -187,6 +227,8 @@ const Settings = (props) => {
               </View>
             </View>
           </View>
+          <View>
+        </View>
         </ScrollView>
       </View>
     </View>
@@ -277,5 +319,10 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     marginHorizontal: 20,
     marginVertical: 10,
+  },
+  big: {
+    fontSize: 18,
+    color: 'black',
+    fontWeight: 'bold',
   },
 });

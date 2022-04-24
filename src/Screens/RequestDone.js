@@ -71,7 +71,7 @@ export default function RequestDone({ navigation, route }) {
       const { granted } = await Location.requestForegroundPermissionsAsync();
       if (!granted) return;
       const {
-        coords: { latitude, longitude, name },
+        coords: { latitude, longitude }
       } = await Location.getCurrentPositionAsync();
       setLatLng({ latitude: latitude, longitude: longitude });
     } catch (err) {
@@ -79,10 +79,29 @@ export default function RequestDone({ navigation, route }) {
     }
   };
 
+  const getCity = async ()=>{
+    try {
+      const cityName = await Location.reverseGeocodeAsync({
+        latitude: 5.78216,
+        longitude: -0.1821567,
+      });
+      let city;
+      cityName.find((p) => {
+        city = p.city;
+        console.log(city);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     checkPermission();
     getLocation();
+    getCity();
   }, []);
+
+  console.log(city);
 
   const [userOrigin, setUserOrigin] = useState({});
 
@@ -90,7 +109,7 @@ export default function RequestDone({ navigation, route }) {
     setUserOrigin({
       latitude: latlng.latitude,
       longitude: latlng.longitude,
-      name: origin.name,
+      name: origin.name, 
     });
     setUserDestination({
       latitude: destination.latitude,
@@ -178,7 +197,7 @@ export default function RequestDone({ navigation, route }) {
         <View style={styles.directbtn}>
           <TouchableOpacity>
             <View style={styles.view6}>
-              <Text style={styles.text1}>{city}</Text>
+              <Text style={styles.text1}>{city.length ? city : 'Current Location'}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
