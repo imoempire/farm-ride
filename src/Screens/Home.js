@@ -57,34 +57,30 @@ const Home = ({ navigation }) => {
     }
   };
 
-  const [locationName, setLocationName] = useState();
-
   const locName = async () => {
     const name = await Location.reverseGeocodeAsync({
       latitude: latlng.latitude,
       longitude: latlng.longitude,
     });
-
     let city;
     name.find((p) => {
       city = p.city;
       setCity(p.city);
     });
-    console.log(city);
   };
-
+  
   const _map = useRef(1);
-
+  
   useEffect(() => {
     checkPermission();
     getLocation();
-    
   }, []);
-
+  
   useEffect(() => {
     locName();
   }, [latlng]);
-
+  
+  console.log(latlng);
   return (
     <View style={styles.container}>
       <View style={styles.Image}>
@@ -123,14 +119,8 @@ const Home = ({ navigation }) => {
           onPress={() => navigation.navigate("Request", { state: 0 })}
           style={[styles.btn, styles.shadow]}
         >
-          <Text>Book A Pick-Up</Text>
+          <Text style={{fontSize: 17}}>Order A Pick-Up</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate("BookLate")}
-          style={[styles.btn, styles.shadow]}
-        >
-          <Text>Pick-Up & Sell</Text>
-        </TouchableOpacity> */}
       </View>
       <View style={styles.mapView}>
         <Text style={styles.Text}>Around You</Text>
@@ -219,7 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     height: "70%",
-    width: (WIDTH * 60) / 100,
+    width: (WIDTH * 90) / 100,
     marginVertical: 20,
     justifyContent: "center",
     marginHorizontal: 10,

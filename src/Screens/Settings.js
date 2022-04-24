@@ -16,7 +16,7 @@ import {
   Entypo,
   AntDesign,
   Feather,
-  MaterialCommunityIcons 
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import client from "../Component/api/client";
 import * as ImagePicker from "expo-image-picker";
@@ -133,8 +133,12 @@ const Settings = (props) => {
             </View>
             <View style={styles.accountBox}>
               <View style={styles.BoxItem}>
-                <FontAwesome5 name="user-edit" size={24} color="black" />
-                <Text style={{ fontSize: 20, marginHorizontal: 20 }}>Edit</Text>
+                <TouchableOpacity style={{flexDirection: 'row'}}>
+                  <FontAwesome5 name="user-edit" size={24} color="black" />
+                  <Text style={{ fontSize: 20, marginHorizontal: 20 }}>
+                    Edit
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -159,13 +163,19 @@ const Settings = (props) => {
             <View style={styles.settingBox}>
               <View style={styles.settingBoxItem}>
                 <Ionicons name="notifications" size={24} color="black" />
-                <Text style={{ fontSize: 20, marginHorizontal: 20 }}>
-                  Notifications
-                </Text>
+                <TouchableOpacity>
+                  <Text style={{ fontSize: 20, marginHorizontal: 20 }}>
+                    Notifications
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.settingBoxItem}>
                 <Entypo name="help-with-circle" size={24} color="black" />
-                <Text style={{ fontSize: 20, marginHorizontal: 20 }}>Help</Text>
+                <TouchableOpacity>
+                  <Text style={{ fontSize: 20, marginHorizontal: 20 }}>
+                    Help
+                  </Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.settingBoxItem}>
                 <AntDesign name="logout" size={24} color="black" />
@@ -217,7 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   BoxItem: {
-    marginVertical: 20,
+    marginVertical: 10,
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 10,
