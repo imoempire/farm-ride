@@ -23,12 +23,10 @@ const WIDTH = Dimensions.get("window").width;
 const Extra = () => {
   const { history, setHistory } = useContext(HistoryContext);
 
-  const [pickupHistory, setPickupHistory] = useState(historyList);
-
-  console.log(history);
+  // const [pickupHistory, setPickupHistory] = useState(historyList);
 
   const Delete = (itemId) => {
-    setRideHistory(rideHistory.filter((item) => item.id !== itemId));
+    setHistory(history.filter((item) => item.id !== itemId));
     alert("Deleted");
   };
   return (

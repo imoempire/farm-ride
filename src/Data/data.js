@@ -6,14 +6,6 @@ export const rideData =[
     {street:"New SuperMarket",contact:"0575687653",id:"4"},
 ];
 
-import { FontAwesome5 } from '@expo/vector-icons';
-import { appColor } from './styles';
-
-export const extra = [ 
-    {title:'Market', id: 1, icon: FontAwesome5 , name: 'comment-dollar', color: appColor },
-    {title:'Hire Tools & Labor', id: 4, icon: FontAwesome5, name: 'hire-a-helper', color: appColor},
-]
-
 export const historyList = [ 
     {pickup:'Banana Street', id: 1,  drop: 'Market', date:'2/5/2021' },
     {pickup:'Main Road', id: 2,  drop: 'Market', date:'5/5/2021'},

@@ -7,7 +7,6 @@ import SignIn from "../Screens/SignIn";
 import SignUp from "../Screens/SignUp";
 import Tabs from "../Screens/Tabs";
 import BookNow from "../Screens/BookNow";
-import BookLate from "../Screens/BookLate";
 import RequestDone from "../Screens/RequestDone";
 import DestinationScreen from "../Screens/DestinationScreen";
 import Forgetpassword from "../Screens/ForgetPassword";

@@ -64,13 +64,6 @@ const SignUp = ({ navigation }) => {
     return true;
   };
 
-  // const sumbitForm = () => {
-  //   if (isValidForm()) {
-      
-  //     console.log(userInfo);
-  //   }
-  // };
-
   const signUp = async (values, formikActions) => {
    try {
     const res = await client.post("/create-user", { ...values });
@@ -171,73 +164,6 @@ const SignUp = ({ navigation }) => {
               }}
             </Formik>
           </FormContainer>
-          {/* {error?<Text style={{color: 'red', fontSize: 15 }}>{error}</Text>:null} */}
-
-          {/* <FormContainer>
-            <Formik
-              initialValues={userInfo}
-              validationSchema={validationSchema}
-              onSubmit={signUp}
-            >
-              {({
-                values,
-                errors,
-                touched,
-                isSubmitting,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-              }) => {
-                const { fullname, email, password, confirmPassword } = values;
-                return (
-                  <>
-                    <AppInput
-                      value={fullname}
-                      error={touched.fullname && errors.fullname}
-                      onChangeText={handleChange("fullname")}
-                      onBlur={handleBlur("fullname")}
-                      label="Full Name"
-                      placeholder="John Smith"
-                    />
-                    <AppInput
-                      value={email}
-                      error={touched.email && errors.email}
-                      onChangeText={handleChange("email")}
-                      onBlur={handleBlur("email")}
-                      autoCapitalize="none"
-                      label="Email"
-                      placeholder="example@email.com"
-                    />
-                    <AppInput
-                      value={password}
-                      error={touched.password && errors.password}
-                      onChangeText={handleChange("password")}
-                      onBlur={handleBlur("password")}
-                      autoCapitalize="none"
-                      secureTextEntry
-                      label="Password"
-                      placeholder="********"
-                    />
-                    <AppInput
-                      value={confirmPassword}
-                      error={touched.confirmPassword && errors.confirmPassword}
-                      onChangeText={handleChange("confirmPassword")}
-                      onBlur={handleBlur("confirmPassword")}
-                      autoCapitalize="none"
-                      secureTextEntry
-                      label="Confirm Password"
-                      placeholder="********"
-                    />
-                    <SubmitButton
-                      submitting={isSubmitting}
-                      onPress={sumbitForm}
-                      title="Sign up"
-                    />
-                  </>
-                );
-              }}
-            </Formik>
-          </FormContainer> */}
         </View>
         <View style={styles.options}>
           <Buttons

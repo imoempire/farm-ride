@@ -75,42 +75,6 @@ const Settings = (props) => {
     }
   };
 
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [address, setAddress] = useState(null);
-  const [getLocation, setGetLocation] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-      }
-
-      Location.setGoogleApiKey(apiKey);
-
-      console.log(status, 'yth');
-
-      let { coords } = await Location.getCurrentPositionAsync();
-
-      setLocation(coords);
-
-      console.log(coords, 'df');
-
-      if (coords) {
-        let { longitude, latitude } = coords;
-
-        let regionName = await Location.reverseGeocodeAsync({
-          longitude,
-          latitude,
-        });
-        setAddress(regionName);
-        console.log(regionName, 'nothing');
-      }
-
-    });
-  }, [getLocation]);
-
   return (
     <View style={styles.container}>
       <View style={styles.Image}>

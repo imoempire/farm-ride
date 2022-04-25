@@ -66,7 +66,6 @@ const Home = ({ navigation }) => {
      latitude,
      longitude,
     });
-    console.log(name);
     let city;
     name.find((p) => {
       city = p.city;
@@ -77,7 +76,6 @@ const Home = ({ navigation }) => {
       console.log(error);
     }
   };
-  console.log(city);
   const _map = useRef(1);
   
   useEffect(() => {

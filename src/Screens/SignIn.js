@@ -62,7 +62,6 @@ const SignIn = ({ navigation }) => {
   };
 
   const submitForm = async () => {
-    console.log(userInfo);
     if (isValidForm()) {
       try {
         const res = await client.post("/sign-in", { ...userInfo });
