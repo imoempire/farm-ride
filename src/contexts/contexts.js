@@ -32,7 +32,7 @@ export const DestinationContextProvider = (props) => {
 
 export const HistoryContextProvider = (props) => {
   const [city, setCity]= useState('');
-  const [history, setHistory] = useState('')
+  const [history, setHistory] = useState([])
   return (
     <HistoryContext.Provider value={{ history, setHistory, city, setCity }}>
       {props.children}

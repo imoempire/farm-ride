@@ -10,7 +10,7 @@ import {
 import React, { useContext, useState } from "react";
 import TopBar from "../Component/TopBar/TopBar";
 import { extra, historyList } from "../Data/data";
-import { MaterialCommunityIcons,FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import {
   DestinationContext,
   HistoryContext,
@@ -21,19 +21,14 @@ import { appColor } from "../Data/styles";
 const WIDTH = Dimensions.get("window").width;
 
 const Extra = () => {
-  const { origin, setOrigin } = useContext(OriginContext);
   const { history, setHistory } = useContext(HistoryContext);
-
-  const [rideHistory, setRideHistory] = useState(history);
-
-  console.log(rideHistory);
 
   const [pickupHistory, setPickupHistory] = useState(historyList);
 
   console.log(history);
 
   const Delete = (itemId) => {
-    setPickupHistory(pickupHistory.filter((item) => item.id !== itemId));
+    setRideHistory(rideHistory.filter((item) => item.id !== itemId));
     alert("Deleted");
   };
   return (
@@ -43,10 +38,13 @@ const Extra = () => {
       </View>
       <View style={styles.Extra}>
         <View>
-          <TouchableOpacity onPress={()=>{
-            alert(" Let help you sell your product")
-          }} style={[styles.btn, styles.shadow]}>
-            <FontAwesome5 name='comment-dollar' size={40} color={appColor} />
+          <TouchableOpacity
+            onPress={() => {
+              alert(" Let help you sell your product");
+            }}
+            style={[styles.btn, styles.shadow]}
+          >
+            <FontAwesome5 name="comment-dollar" size={40} color={appColor} />
             <Text>MARKET</Text>
           </TouchableOpacity>
         </View>
@@ -58,7 +56,7 @@ const Extra = () => {
             <Text>History Empty </Text>
           ) : (
             <FlatList
-              data={rideHistory}
+              data={history}
               keyExtractor={(item) => item.id}
               renderItem={({ item, index }) => (
                 <View
@@ -74,7 +72,7 @@ const Extra = () => {
                         fontSize: 17,
                       }}
                     >
-                      {item.from} to {item.drop}
+                      {item.city} to {item.destination.name}
                     </Text>
                     <Text
                       style={{

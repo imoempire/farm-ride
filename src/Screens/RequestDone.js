@@ -38,13 +38,11 @@ export default function RequestDone({ navigation, route }) {
   const { origin, setOrigin } = useContext(OriginContext);
   const { destination, setDestination } = useContext(DestinationContext);
   const { history, setHistory, city } = useContext(HistoryContext);
-  console.log(city);
+ 
   const [userDestination, setUserDestination] = useState({
     latitude: destination.latitude,
     longitude: destination.longitude,
   });
-
-  const [locationName, setLocationName] = useState();
 
   const bottomsheet1 = useRef(1);
   const snapPoints1 = useMemo(() => ["15%", "60%"], []);
@@ -79,29 +77,10 @@ export default function RequestDone({ navigation, route }) {
     }
   };
 
-  const getCity = async ()=>{
-    try {
-      const cityName = await Location.reverseGeocodeAsync({
-        latitude: 5.78216,
-        longitude: -0.1821567,
-      });
-      let city;
-      cityName.find((p) => {
-        city = p.city;
-        console.log(city);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
     checkPermission();
     getLocation();
-    getCity();
   }, []);
-
-  console.log(city);
 
   const [userOrigin, setUserOrigin] = useState({});
 
@@ -140,7 +119,12 @@ export default function RequestDone({ navigation, route }) {
   );
 
   const addHistory = () => {
-    setHistory([...history, { city, destination }]);
+    const newHistory = {
+      id: Math.random().toString(),
+      city,
+      destination
+    }
+    setHistory([newHistory, ...history]);
   };
 
   const handleGetDirections = () => {
